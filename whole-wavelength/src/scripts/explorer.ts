@@ -25,7 +25,7 @@ function nodeMarkup(node: GraphNode) {
   const outer = node.id === 'user' || node.id === 'database';
   const w = outer ? 73 : 136;
   const contract = node.kind === 'port';
-  return `<g class="node ${node.kind || ''} ${selected === node.id ? 'selected' : ''}" data-node="${node.id}" role="button" tabindex="0" aria-label="${escape(node.label)}${contract ? ', Vertrag ohne eigene Ausführung' : ''}: Details anzeigen" aria-pressed="${selected === node.id}"><rect x="${node.x - w / 2}" y="${node.y - 29}" width="${w}" height="58" rx="7"/>${contract ? `<text x="${node.x}" y="${node.y - 37}" text-anchor="middle" class="node-sub">«interface» · Vertrag</text>` : ''}<text x="${node.x}" y="${node.y - 4}" text-anchor="middle" class="node-sub">${escape(node.sub)}</text><text x="${node.x}" y="${node.y + 14}" text-anchor="middle" style="font-size:${outer ? '10' : '10.5'}px">${escape(node.label)}</text></g>`;
+  return `<g class="node ${node.kind || ''} ${selected === node.id ? 'selected' : ''}" data-node="${node.id}" role="button" tabindex="0" aria-label="${escape(node.label)}${contract ? ', Vertrag ohne eigene Ausführung' : ''}: Details anzeigen" aria-pressed="${selected === node.id}"><rect x="${node.x - w / 2}" y="${node.y - 29}" width="${w}" height="58" rx="7"/>${contract ? `<text x="${node.x}" y="${node.y - 37}" text-anchor="middle" class="node-sub">«interface» · Vertrag</text>` : ''}<text x="${node.x}" y="${node.y - 4}" text-anchor="middle" class="node-sub">${escape(node.sub)}</text><text x="${node.x}" y="${node.y + 14}" text-anchor="middle" style="font-size:${outer ? '10' : '13'}px">${escape(node.label)}</text></g>`;
 }
 function edgeMarkup(edge: Edge, nodes: GraphNode[]) {
   const from = nodes.find(n => n.id === edge.from)!;

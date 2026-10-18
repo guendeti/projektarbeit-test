@@ -44,4 +44,6 @@ Referenzen: https://www.w3schools.com/css/default.asp · https://refactoring.gur
 
 ## Grenzen des Umfangs
 
-Die Website und die kleinen Beispiele sind implementiert. Ein vollständiger wissenschaftlicher Schlussbericht, reale Nutzerstudien, vier produktionsreife Spring-Systeme und eine offizielle SCS-PetClinic gehören nicht zu diesen Artefakten. Das Prüfprotokoll benennt tatsächlich ausgeführte Prüfungen und offene Nachweise.
+Website, TypeScript-Vergleich und vier ausführbare Java-/Spring-Visit-Varianten sind implementiert. Die Varianten sind zusätzlich in den vollständigen gepinnten PetClinic-Quellcode integriert: Ein neuer Eingang speichert in dieselben Tabellen; das Ergebnis erscheint in der ursprünglichen Owner-Detailansicht. Der ursprüngliche Visit-Controller bleibt als Baseline erhalten. Die übrige Anwendung wird nicht als vollständig nach einem der vier Muster umgebaut bezeichnet.
+
+Der Word-Bericht ist in der bestehenden Gliederung ausformuliert. Spätere Projektrückmeldungen, eine externe Zielgruppen-Evaluation und die Dezember-Abschlussnachweise sind nach ihrer tatsächlichen Durchführung zu ergänzen. Vier produktionsreife verteilte Systeme und eine offizielle SCS-PetClinic werden nicht als Ergebnisse behauptet.

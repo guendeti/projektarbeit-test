@@ -7,6 +7,8 @@ menu?.addEventListener('click', () => {
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { menu?.setAttribute('aria-expanded', 'false'); document.querySelector('.sidebar')?.classList.remove('is-open'); } });
 const dialog = document.querySelector<HTMLDialogElement>('#search-dialog');
 const input = document.querySelector<HTMLInputElement>('#site-search');
+// Explicitly close on the first Escape; search inputs may consume the native key.
+dialog?.addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); dialog.close(); } });
 document.querySelector('[data-open-search]')?.addEventListener('click', () => { dialog?.showModal(); input?.focus(); });
 document.querySelector('[data-close-search]')?.addEventListener('click', () => dialog?.close());
 dialog?.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
@@ -43,8 +45,13 @@ document.querySelectorAll<HTMLButtonElement>('[data-quiz-answer]').forEach(butto
   feedback.hidden = false; feedback.textContent = correct ? `Richtig! ${quiz.dataset.explanation}` : 'Noch nicht ganz. Überlege, welche Grenze oder Abhängigkeit sich tatsächlich verändert. Du kannst es erneut versuchen.';
 }));
 document.querySelectorAll('pre').forEach(pre => {
+  pre.tabIndex = 0;
   if (!pre.querySelector('code')) return;
   const button = document.createElement('button'); button.className = 'copy-code'; button.textContent = 'Kopieren'; button.setAttribute('aria-label', 'Code kopieren');
   button.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.querySelector('code')!.textContent || ''); button.textContent = 'Kopiert ✓'; } catch { button.textContent = 'Bitte manuell kopieren'; } });
   pre.append(button);
+});
+document.querySelectorAll<HTMLTableElement>('.prose table').forEach(table => {
+  table.tabIndex = 0;
+  table.setAttribute('aria-label', table.caption?.textContent || 'Vergleichstabelle, bei Bedarf seitlich scrollen');
 });

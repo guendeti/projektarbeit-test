@@ -60,7 +60,7 @@ Ein Interface allein entscheidet den Vergleich nicht. Auch Layered kann Reposito
 
 Die Muster schaffen Möglichkeiten. Ob Tests hilfreich, Grenzen passend und Änderungen einfacher werden, hängt von ihrer konkreten Umsetzung ab. Aus einem Diagramm lässt sich keine empirisch bewiesene Qualitätssteigerung ableiten.
 
-Unsere kleinen TypeScript-Varianten zeigen diesen Mechanismus in Isolation. Sie belegen keine vollständige Architekturkonformität einer produktiven Spring-Anwendung. Java-Skizzen und Browser-Demo unterscheiden sich ausserdem in der Aufteilung der Validierung: Die Java-Ausschnitte zeigen die Datumsprüfung im Application Service, die Demo bündelt die gemeinsamen Fachprüfungen in einer Domain-Funktion. Diese Wahl muss nicht durch den Architekturnamen vorgegeben sein.
+Die ausführbaren Java-/Spring-Varianten auf der Seite „Beispielcode“ ergänzen die Browser-Demo um echte HTTP-Anfragen, JDBC-Persistenz und ArchUnit-Regeln. Sie implementieren denselben Visit als eigenständigen Lehrausschnitt; die vollständige PetClinic wird nicht nachgebaut. Unsere kleinen TypeScript-Varianten zeigen diesen Mechanismus in Isolation. Sie belegen keine vollständige Architekturkonformität einer produktiven Spring-Anwendung. Java-Skizzen und Browser-Demo unterscheiden sich ausserdem in der Aufteilung der Validierung: Die Java-Ausschnitte zeigen die Datumsprüfung im Application Service, die Demo bündelt die gemeinsamen Fachprüfungen in einer Domain-Funktion. Diese Wahl muss nicht durch den Architekturnamen vorgegeben sein.
 
 ## Kein Sieger ohne Kontext
 

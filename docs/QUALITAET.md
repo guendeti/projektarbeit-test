@@ -1,59 +1,54 @@
 # Prüfprotokoll
 
-## Fachliche Überarbeitung nach Quellenabgleich
-
-Die vier Einstiegsseiten wurden verständlicher aufgebaut und um Qualitätsziele, Randbedingungen, Zielgruppe und die didaktische Begrenzung der beiden Architekturebenen ergänzt. „Besuch erfassen“ ist der fachliche Hauptbegriff. Der kanonische Ablauf enthält keine Vet-Zuordnung; die reale Modulith-Variante ergänzt diese per Event. SCS und Microservices werden als überschneidende Konzepte erklärt; Layered wird nicht auf konkrete Repository-Klassen eingeschränkt.
-
-Das Visit-Diagramm zeigt Controller-Zugriffe auf Fachmodell und Repository getrennt. Ports sind im Explorer Verträge ohne eigene Laufzeitausführung. Nur die Codeansicht zeigt Abhängigkeiten auf diese Interfaces. Ausführbare Varianten nutzen benannte äussere Adapter. Die Beschreibung ist auf 255 Zeichen begrenzt, Demo-spezifische Vereinfachungen sind dokumentiert.
-
-Prüfstand: 56 erfolgreiche Tests einschliesslich 255/256-Zeichen-Grenze und Graph-/Trace-Prüfung ohne ausführende Interfaces. TypeScript/Astro: 30 Dateien, keine Fehler, Warnungen oder Hinweise. Produktionsbuild: 18 HTML-Seiten. Statische Prüfung: 680 lokale Verweise, Anker, Quizoptionen, Metadaten und Sitemap erfolgreich geprüft.
-
-`npm run verify:sources` wurde erfolgreich online ausgeführt. Sechs ausgewählte Quelldateien an vier festen Repository-Commits antworteten mit HTTP 200 und erfüllten die geprüften fachlichen Aussagen. Die konkreten Commits stehen in `src/data/source-snapshots.ts` und im Quellenbereich. Dies ist ein gezielter Beleg für die behandelten Aussagen, kein vollständiger Audit der Repositories. Die unten dokumentierte Grenze der visuellen Browserprüfung gilt weiterhin.
-
-## Designvereinfachung nach Nutzerfeedback
-
-Die Startseite wurde auf Einleitung und Lernpfad reduziert. Weisse Flächen, schwarze Lerntexte, lokale Systemschriften und blaue Akzente ersetzen die ursprüngliche Gestaltung. Lerntexte verwenden 18 Pixel. Das rechte Inhaltsverzeichnis und die Lesezeitanzeige sind entfernt. Lerninhalte und Interaktionslogik bleiben unverändert.
-
-Erneut geprüft: TypeScript/Astro ohne Fehler, Warnungen oder Hinweise; Produktionsbuild mit 18 HTML-Seiten; 680 lokale Links und Asset-Verweise samt Ankern erfolgreich geprüft. Zusätzlich wurde am erzeugten HTML kontrolliert, dass die entfernten Startseitenblöcke, das Inhaltsverzeichnis und die Lesezeit nicht mehr ausgegeben werden. Keine externen Webfonts mehr vorhanden. Die unten dokumentierte Einschränkung der visuellen Browserprüfung gilt weiterhin.
-
-## Automatisierte Prüfungen – 18.10.2026
+Stand: 18.10.2026. Tatsächlich ausgeführte technische Prüfungen; keine Testabdeckungsquote und kein Beleg für empirischen Lernerfolg.
 
 | Prüfung | Ergebnis |
 | --- | --- |
-| `npm run check` | 27 Dateien, 0 Fehler, 0 Warnungen, 0 Hinweise |
-| `npm test` | 48 Tests erfolgreich |
-| `npm run build` | 18 HTML-Seiten plus Sitemap erfolgreich erzeugt |
-| `npm run verify` | 787 interne Link-/Asset-Verweise, alle lokalen Anker, Quizoptionen und Sitemap-Einträge geprüft |
-| Lokaler HTTP-Smoke-Test | Startseite, Explorer, Quellen, Code, Clean-Kapitel, Vergleich und Sitemap antworten mit HTTP 200 |
-| `git diff --check` | Keine Whitespace-Fehler |
-| npm-Installation | Audit meldet 0 bekannte Schwachstellen zum Installationszeitpunkt |
+| `npm run check` | 34 Dateien, keine Fehler, Warnungen oder Hinweise |
+| `npm test` | 56 erfolgreiche Verhaltenstests und Graphprüfungen |
+| Java-Lehrausschnitt: `mvn verify` | 24 erfolgreiche Tests, ausführbare JAR erzeugt |
+| Angepasste vollständige PetClinic: gezielter Maven-Lauf | 45 erfolgreiche Tests, darunter vier neue Integrationsfälle und ursprüngliche Webcontroller |
+| `npm run build` | 18 HTML-Seiten, Sitemap, 13 Markdown-Endpunkte, zwei Java-Quellcodearchive |
+| `npm run verify` | 695 lokale Links/Assets einschliesslich Anker und Downloads erfolgreich geprüft |
+| `npm run test:browser` | Neun erfolgreiche Prüffälle in drei Browserkonfigurationen |
+| `npm run verify:sources` | Sechs ausgewählte Quelldateien an vier festen Commits erreichbar; geprüfte Textmerkmale bestätigt |
 
-Die fachlichen Tests prüfen alle vier ausführbaren Varianten: erfolgreicher Visit, korrektes Pet, wiederholte Visits, heutiges/vergangenes/unmögliches/ungültiges Datum, leere/überlange Beschreibung, fehlender Owner, nicht zugehöriges Pet und unveränderte Persistenz bei Fehlern. Graphprüfungen kontrollieren Referenzen und insbesondere die Umkehr der Code-Abhängigkeit am Persistenzvertrag.
+## Umfang
 
-Der statische Build-Test kontrolliert genau ein H1 pro Seite, deutsche Sprachkennzeichnung, Meta-Beschreibung, Main-Landmark, eindeutige IDs, vorhandene interne Ziele und keine Platzhalterlinks. Er prüft auch den GitHub-Pages-Basispfad `/projektarbeit-test`.
+Die TypeScript-Tests prüfen alle vier Architekturen auf Erfolg, korrektes Pet, wiederholte Visits, ungültige/heutige/vergangene Daten, leere Beschreibungen, 255/256-Zeichen-Grenze und fehlende oder nicht passende Fachobjekte. Graphprüfungen trennen Aufrufe von statischen Abhängigkeiten; Interfaces dürfen keine Laufzeitstationen sein.
 
-## Umgesetzte Accessibility-Massnahmen
+Die 24 Java-Tests umfassen 20 parameterisierte HTTP-/H2-Szenarien und vier ArchUnit-Strukturtests. Insbesondere wird ein Datenbankfehler nach dem Löschen bestehender Visit-Zeilen erzwungen: Die Transaktion muss den ursprünglichen Datenbestand wiederherstellen. Eine feste Uhr macht Datumsprüfungen reproduzierbar. ArchUnit kontrolliert den frameworkfreien Kern, technische Abhängigkeiten innerer Anwendungsbereiche und die Trennung der Varianten.
 
-Semantische Bereiche, Skip-Link, sichtbare Fokusmarkierung, native Buttons und Formulare, beschriftete Eingaben, Tastatursteuerung der Architektur-Tabs, per Tastatur auswählbare SVG-Komponenten, Statusmeldungen, reduzierte Animation bei entsprechender Systemeinstellung und eine Druckansicht. Schriftfarben der kleinen Labels wurden für besseren Kontrast angepasst. Die Navigation wird unter 800 px als aufklappbares Menü angeboten; Formulare und Detailbereiche werden auf schmalen Displays untereinander angeordnet.
+Die vier neuen Integrationsfälle der vollständigen PetClinic speichern je einen Visit durch Layered, Clean, Hexagonal und Onion in die vorhandene Datenbank. Danach muss er auf der originalen, serverseitig gerenderten Owner-Detailseite erscheinen. Zusammen mit ursprünglichen Owner-, Pet-, Visit-, Vet- und Welcome-Webcontrollertests bestehen 45 Tests:
 
-Diese Massnahmen sind keine Behauptung einer formell nachgewiesenen WCAG-Konformität.
-
-## Grenzen der Prüfung
-
-Die Browserinventur der verbundenen Computer-Use-Umgebung lieferte keine Browser. Auch das Öffnen eines In-App-Browser-Tabs meldete „Browser is not available: iab“. Deshalb wurden keine visuelle Browserprüfung, kein realer Touch-/Screenreader-Test und keine automatisierten End-to-End-Klicktests durchgeführt. Responsive CSS, Tastaturlogik und ARIA-Attribute wurden implementiert und im Quelltext geprüft; eine manuelle Sichtprüfung bleibt als separater Nachweis offen.
-
-Keine Nutzerstudie mit externen Personen durchgeführt. Keine empirischen Wartbarkeitsmessungen. Die PetClinic-Repository-Referenzen wurden im Zuge der fachlichen Überarbeitung auf dokumentierte Commits festgelegt; externe Architekturartikel und Framework-Dokumentationen sind weiterhin veränderliche Webquellen.
-
-## Reproduzieren
-
-Im Verzeichnis `whole-wavelength`:
-
-```powershell
-npm ci
-npm run check
-npm test
-npm run build
-npm run verify
+```sh
+mvn -Dtest=ArchitectureIntegrationTest,VisitControllerTests,OwnerControllerTests,PetControllerTests,VetControllerTests,WelcomeControllerTests test
 ```
 
-Der Pages-Workflow führt diese Qualitätsprüfungen vor dem Deployment aus.
+Dies ist kein Lauf aller Docker-/Datenbankvarianten der ursprünglichen PetClinic.
+
+Playwright prüft Chromium Desktop (1280 px), Chromium mit Pixel-7-Emulation sowie Firefox Desktop. Jede Konfiguration besucht alle 17 regulären Inhaltsseiten, kontrolliert Skriptfehler, horizontalen Seitenüberlauf und axe-core-Regeln mit WCAG-2-A-/AA- und 2.1-AA-Tags. Zusätzlich: Suche, Escape, Navigation, lokaler Lesefortschritt, Quiz, Tastatursteuerung und alle vier Explorer-Modi mit gültigen und ungültigen Besuchen. Screenshots von Startseite, Clean-Kapitel und Explorer wurden zur Sichtprüfung erzeugt.
+
+## Gefundene und behobene Fehler
+
+- Kontraste einzelner Syntaxfarben: schwarze Codebeispiele auf hellem Hintergrund; auch Markdown nutzt ein helles Theme.
+- Scrollbare Tabellen/Code ohne sicheren Tastaturzugang: fokussierbare Scrollbereiche ergänzt.
+- Escape leerte zunächst teilweise nur das Suchfeld: explizite Dialogbehandlung ergänzt.
+- Auf Mobilgeräten zu klein skalierte Diagramme: fokussierbare Scrollbereiche mit lesbarer Mindestbreite.
+- Gleichnamige Spring-Controller: explizite Bean-Namen vergeben.
+- JSON-Bindung bei anderem Jackson-Stand: Transport-Datentyp für Datum/Beschreibung; Route-IDs werden erst im Command übernommen.
+- Erweiterung überlud MVC-Test-Slices: passende Komponentensuche und auf neue APIs begrenzte Fehlerbehandlung.
+
+## Grenzen
+
+Keine externe Zielgruppenstudie durchgeführt. `evaluation/USABILITY.md` enthält ein vorbereitetes Protokoll ohne fingierte Resultate. Keine empirische Wartbarkeits- oder Lernerfolgsmessung.
+
+axe-Prüfungen sind kein vollständiger WCAG-Konformitätsnachweis. Reale Touchgeräte, manuelle Screenreader-Nutzung und weitere Browser bleiben separat zu prüfen. Mobile Browserprüfung ist eine Emulation.
+
+Die Java-Beispiele sind lokale Lehranwendungen ohne Authentisierung oder Schutz vor konkurrierenden Änderungen. Die vollständige PetClinic erhält vier alternative Visit-Wege; ihre übrigen Funktionen werden nicht als vollständig Clean/Hexagonal/Onion-konform ausgegeben. Der separate Lehrausschnitt verwendet eine H2-Datei, die vollständige PetClinic ihre ursprüngliche standardmässige In-Memory-Datenbank.
+
+## Reproduktion
+
+Im Verzeichnis `whole-wavelength`: `npm ci`, `npm run check`, `npm test`, `npm run build`, `npm run verify`. Für Browsertests zunächst `npx playwright install chromium firefox`, danach `npm run test:browser`. Java 21 und Maven 3.9+ für die Java-Projekte verwenden; Start und Tests stehen in deren README bzw. `ARCHITECTURE-CHANGES.md`.
+
+GitHub Actions enthält Website-/Browserprüfungen vor dem Pages-Deployment und einen separaten Java-Prüfworkflow.

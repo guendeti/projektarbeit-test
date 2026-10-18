@@ -1,0 +1,16 @@
+tools/apache-maven-*/
+tools/*.zip
+tools/*.zip.sha512
+tools/m2/
+petclinic-architectures/target/
+petclinic-architectures/data/
+tools/report-qa/
+tools/*.backup.docx
+tools/__pycache__/
+tools/reference/
+tools/*.log
+petclinic-adapted/target/
+petclinic-adapted/data/
+/tools/
+/unterlagen/
+/docs/BERICHT_INHALT.md

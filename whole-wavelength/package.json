@@ -13,13 +13,16 @@
     "test": "node --test examples/architectures.test.ts examples/graphs.test.ts",
     "check": "astro check",
     "verify": "node scripts/verify-build.mjs",
-    "verify:sources": "node scripts/verify-sources.mjs"
+    "verify:sources": "node scripts/verify-sources.mjs",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "astro": "^7.4.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.5",
     "typescript": "^6.0.3"
   }

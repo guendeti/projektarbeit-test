@@ -6,4 +6,5 @@ export default defineConfig({
   site: 'https://guendeti.github.io',
   base: '/projektarbeit-test',
   output: 'static',
+  markdown: { shikiConfig: { theme: 'github-light' } },
 });

@@ -157,6 +157,8 @@ svg { display: block; }
 .figure-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
 .figure-tag { margin-left: auto; font-size: 12px; }
 .architecture-svg { width: 100%; height: auto; color: var(--blue); }
+.diagram-scroll { overflow-x: auto; }
+.diagram-scroll .architecture-svg { min-width: 660px; display: block; }
 .architecture-figure figcaption { border-top: 1px solid var(--line); padding: 14px 18px; font-size: 14px; color: #333; line-height: 1.7; }
 .svg-boundary { fill: #f5f8fb; stroke: #7b9cb8; stroke-width: 1.5; }
 .svg-box { fill: #fff; stroke: #8b9ca9; stroke-width: 1.2; }
@@ -175,6 +177,7 @@ svg { display: block; }
 .comparison-diagrams h2 { font-size: 22px; margin: 0; }
 .comparison-diagrams .architecture-figure { margin: 12px 0; }
 .comparison-diagrams .figure-tag { display: none; }
+.comparison-diagrams .diagram-scroll .architecture-svg { min-width: 450px; }
 .comparison-diagrams .architecture-figure figcaption { font-size: 13px; min-height: 60px; }
 
 /* Search */
@@ -340,3 +343,6 @@ dialog input { width: 100%; padding: 13px; border: 1px solid #849bae; border-rad
   .architecture-figure, .takeaway { break-inside: avoid; }
   a { color: #111; text-decoration: underline; }
 }
+
+/* Keep source examples as readable as the black-on-white lessons. */
+.astro-code span { color: #111 !important; }
