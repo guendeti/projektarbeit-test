@@ -1,5 +1,11 @@
 # Prüfprotokoll
 
+## Designvereinfachung nach Nutzerfeedback
+
+Die Startseite wurde auf Einleitung und Lernpfad reduziert. Weisse Flächen, schwarze Lerntexte, lokale Systemschriften und blaue Akzente ersetzen die ursprüngliche Gestaltung. Lerntexte verwenden 18 Pixel. Das rechte Inhaltsverzeichnis und die Lesezeitanzeige sind entfernt. Lerninhalte und Interaktionslogik bleiben unverändert.
+
+Erneut geprüft: TypeScript/Astro ohne Fehler, Warnungen oder Hinweise; Produktionsbuild mit 18 HTML-Seiten; 680 lokale Links und Asset-Verweise samt Ankern erfolgreich geprüft. Zusätzlich wurde am erzeugten HTML kontrolliert, dass die entfernten Startseitenblöcke, das Inhaltsverzeichnis und die Lesezeit nicht mehr ausgegeben werden. Keine externen Webfonts mehr vorhanden. Die unten dokumentierte Einschränkung der visuellen Browserprüfung gilt weiterhin.
+
 ## Automatisierte Prüfungen – 18.10.2026
 
 | Prüfung | Ergebnis |

@@ -42,7 +42,7 @@ npm run verify
 
 Startseite, vollständiger Lernpfad, anklickbare Diagrammkomponenten im Explorer, vier Architekturansichten, Umschaltung Laufzeit/Code, ausführbare Visit-Demo, Eingabevalidierung, Verständnisfragen, browserlokaler Lesefortschritt, Kapitelsuche, Quellen, Codeansicht, Zurück/Weiter, 404 und Sitemap. Lerninhalte sind statisches HTML und bleiben ohne JavaScript lesbar. JavaScript ist für Explorer, Suche, Quiz und Fortschritt nötig.
 
-Die Suche durchsucht Kapiteltitel und Themenzuordnungen mit einigen Synonymen, nicht den vollständigen Artikeltext. Demo-Daten sind fiktiv und nicht dauerhaft gespeichert. Der Lesefortschritt wird ausschliesslich im Browser gespeichert. Google Fonts lädt optionale Schriften; Systemschriften dienen als Fallback. Es gibt keine Anmeldung, Analytics oder Backend-API.
+Die Suche durchsucht Kapiteltitel und Themenzuordnungen mit einigen Synonymen, nicht den vollständigen Artikeltext. Demo-Daten sind fiktiv und nicht dauerhaft gespeichert. Der Lesefortschritt wird ausschliesslich im Browser gespeichert. Die Schrift verwendet lokale Systemschriften (Segoe UI, Arial, Helvetica); es werden keine externen Schriftdateien geladen. Es gibt keine Anmeldung, Analytics oder Backend-API.
 
 ## Fachliche Einordnung
 

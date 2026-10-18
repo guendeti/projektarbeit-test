@@ -23,68 +23,20 @@ Entscheid: Astro für Layouts, statische Routen und Markdown. TypeScript für da
 
 Technische Referenzen: https://docs.astro.build/en/guides/content-collections/ · https://docs.astro.build/en/guides/deploy/github/ · https://docs.astro.build/en/basics/astro-components/
 
-## Wireframes und Seitentypen
+## Aktueller Seitenaufbau
 
-### 1. Startseite (Desktop)
+Die Gestaltung wurde nach Nutzerfeedback vereinfacht. Als Referenzen für eine inhaltsorientierte Lernseite dienen W3Schools, Refactoring.Guru und CS50 Python.
 
-```text
-┌─────────────────── Kopfzeile: Marke | Suche | GitHub ───────────────┐
-│ Sidebar       │ Titel + Einführung          │ Architektur-Skizze   │
-│ Lernpfad      │ [Starten] [Explorer]         │ System → Core        │
-│ 01–04         ├────────────────────────────────────────────────────┤
-│ Explorer      │ Didaktischer Leitsatz                              │
-│ Quellen       ├────────────┬────────────┬────────────┬─────────────┤
-│ Code          │ Grundlagen │ PetClinic  │ System     │ Code        │
-│ Fortschritt   ├────────────────────────────────────────────────────┤
-│               │ Explorer-Vorschau + Einstieg                       │
-└───────────────┴────────────────────────────────────────────────────┘
-```
-
-### 2. Lernseite (Desktop)
-
-```text
-Sidebar | Breadcrumb / Kapitel / Lesezeit         | Inhaltsverzeichnis
-        | Titel + Lead                            | Ankerlinks
-        | SVG-Diagramm                            | Explorer-Verweis
-        | Erklärung + Beispiel + Abwägung          |
-        | Merksatz / Verständnisfrage / Quellen   |
-        | Gelesen markieren / Zurück / Weiter     |
-```
-
-### 3. Architekturdetail (Desktop)
-
-```text
-Sidebar | Architektur-Titel + Kernaussage          | Abschnittsanker
-        | Architekturspezifisches SVG-Modell       |
-        | Verantwortlichkeiten / Visit-Zuordnung   |
-        | Java-Beispiel / Package-Struktur         |
-        | Laufzeit vs. Code / Trade-offs           |
-        | Merksatz / Quiz / Quellen / Navigation   |
-```
-
-### 4. Explorer (Desktop)
-
-```text
-Sidebar | Titel + gemeinsamer Use-Case
-        | [Layered][Clean][Hexagonal][Onion] [Laufzeit][Code]
-        | Benutzer → interaktiver Komponenten-Graph → Datenbank
-        | Baustein-Details              | Architektur-Erklärung
-        | Visit-Formular                | Ablaufprotokoll + Ergebnis
-```
-
-### Mobile Navigation
-
-```text
-Marke | Suche | Menü
-Titel / Inhalt in einer Spalte
-Menü öffnet die Kapitelnavigation; Escape schliesst sie.
-Diagramme skalieren; Explorer ist horizontal scrollbar.
-Formular und Protokoll stehen untereinander.
-```
+- **Startseite:** kurze Einführung und vier einfache, nummerierte Lernpfad-Einträge. Keine Hero-Illustration, Statistiken, Teaser oder zusätzlichen Werbetexte.
+- **Lernseite / Architekturdetail:** linke Kapitelnavigation, Breadcrumb, Titel und Einführung, Diagramm, Lerntext und Beispiele, Merksatz, Verständnisfrage, Quellen, Lesefortschritt sowie Zurück/Weiter. Kein rechtes Inhaltsverzeichnis und keine Lesezeitanzeige.
+- **Explorer:** unveränderte Architekturwahl, zwei Pfeilansichten, interaktives Diagramm, Bausteindetails, Visit-Formular und Ablaufprotokoll.
+- **Mobil:** Navigation über Menü; Lerntext in einer Spalte. Explorer-Diagramm horizontal scrollbar; Formular und Protokoll untereinander.
 
 ## Designregeln
 
-Eigenständige Gestaltung als ruhiges Lernhandbuch: warmes Papierweiss, dunkles Grün, Salbei für den Kern, Ocker für Verträge. Feste Kapitelnavigation, begrenzte Textbreite und klare Überschriften. Figuren dienen der Erklärung und werden mit Bedeutung und Herkunft versehen. Keine Fortschrittsleiter von Monolith zu Microservices. Die zusätzliche Struktur der Codevarianten wird als Abwägung dargestellt.
+Weisser Hintergrund, schwarze Lerntexte und dezente blaue Akzente (#0064a6). Gut lesbare lokale Systemschriften: Segoe UI, Arial, Helvetica, sans-serif. Lerntexte mit 18 Pixeln und kräftigerer Grundschrift, klaren Überschriften und grosszügigem Zeilenabstand. Keine externen Webfonts. Einfache Trennlinien und flache Flächen statt dekorativer Kacheln und Illustrationen auf der Startseite. Inhalte und interaktive Funktionen bleiben erhalten.
+
+Referenzen: https://www.w3schools.com/css/default.asp · https://refactoring.guru/refactoring/catalog · https://cs50.harvard.edu/python/
 
 ## Grenzen des Umfangs
 
