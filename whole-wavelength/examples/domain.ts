@@ -18,7 +18,7 @@ export function addVisit(owner: Owner, command: VisitCommand, today: string): Vi
     throw new Error('Das Besuchsdatum muss ein gültiger Tag in der Zukunft sein.');
   }
   if (!command.description.trim()) throw new Error('Bitte gib eine Beschreibung an.');
-  if (command.description.trim().length > 240) throw new Error('Die Beschreibung darf höchstens 240 Zeichen enthalten.');
+  if (command.description.trim().length > 255) throw new Error('Die Beschreibung darf höchstens 255 Zeichen enthalten.');
   const visit = { date: command.date, description: command.description.trim() };
   pet.visits.push(visit);
   return visit;

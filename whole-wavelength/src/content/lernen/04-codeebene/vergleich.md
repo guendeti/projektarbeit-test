@@ -46,6 +46,8 @@ Unsere klassische Layered-Variante kennt eine Datenzugriffsschicht unterhalb des
 
 Layered verbietet eine solche Umkehr nicht. Eine Anwendung kann fachlich geschichtet sein und an ihren Grenzen Ports und Adapter nutzen. Die Begriffe sind daher keine vier vollständig disjunkten Kategorien.
 
+Ein Interface allein entscheidet den Vergleich nicht. Auch Layered kann Repository-Abstraktionen und austauschbare Implementierungen verwenden. Wir betrachten, ob der Persistenzvertrag dem inneren Anwendungskern gehört oder von der äusseren Datenschicht vorgegeben wird.
+
 ## Testbarkeit, Wartbarkeit und Aufwand
 
 | Frage | Klassische Layered-Variante | Varianten mit inneren Verträgen |
@@ -57,6 +59,8 @@ Layered verbietet eine solche Umkehr nicht. Eine Anwendung kann fachlich geschic
 | Automatisch wartbarer? | Nein | Ebenfalls nein |
 
 Die Muster schaffen Möglichkeiten. Ob Tests hilfreich, Grenzen passend und Änderungen einfacher werden, hängt von ihrer konkreten Umsetzung ab. Aus einem Diagramm lässt sich keine empirisch bewiesene Qualitätssteigerung ableiten.
+
+Unsere kleinen TypeScript-Varianten zeigen diesen Mechanismus in Isolation. Sie belegen keine vollständige Architekturkonformität einer produktiven Spring-Anwendung. Java-Skizzen und Browser-Demo unterscheiden sich ausserdem in der Aufteilung der Validierung: Die Java-Ausschnitte zeigen die Datumsprüfung im Application Service, die Demo bündelt die gemeinsamen Fachprüfungen in einer Domain-Funktion. Diese Wahl muss nicht durch den Architekturnamen vorgegeben sein.
 
 ## Kein Sieger ohne Kontext
 

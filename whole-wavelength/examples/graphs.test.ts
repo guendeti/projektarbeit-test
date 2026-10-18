@@ -19,10 +19,17 @@ for (const [name, model] of Object.entries(architectures)) {
     if (name === 'layered') {
       assert.ok(model.code.some(edge => edge.from === 'service' && edge.to === 'persistence'));
     } else {
-      assert.ok(model.runtime.some(edge => edge.from === 'port' && edge.to === 'persistence'));
+      assert.ok(model.runtime.some(edge => edge.from === 'service' && edge.to === 'persistence' && edge.label));
       assert.ok(model.code.some(edge => edge.from === 'persistence' && edge.to === 'port' && edge.kind === 'implementation'));
       assert.ok(!model.code.some(edge => edge.from === 'port' && edge.to === 'persistence'));
     }
     assert.ok(!model.code.some(edge => edge.from === 'service' && edge.to === 'database'));
+  });
+  test(`${name}: contracts do not execute runtime calls`, () => {
+    const contracts = new Set(model.nodes.filter(node => node.kind === 'port').map(node => node.id));
+    for (const edge of model.runtime) {
+      assert.ok(!contracts.has(edge.from), 'A contract must not execute a call');
+      assert.ok(!contracts.has(edge.to), 'Runtime calls reach implementations, via contracts');
+    }
   });
 }

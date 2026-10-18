@@ -87,6 +87,8 @@ Code:     Use-Case → Gateway ← Adapter
 
 Der obere Pfeil beschreibt einen Aufruf. Der untere beschreibt statische Typ-Abhängigkeiten. Gerade diese Umkehr ist wichtiger als die gezeichnete Kreisform.
 
+Input Boundary und Gateway sind Verträge, keine ausführenden Zwischenschritte. Zur Laufzeit ruft der Controller den Interactor über die Input Boundary auf; der Interactor erreicht den eingesetzten Persistenzadapter über das Gateway. Das Diagramm im Explorer trennt deshalb ausführende Komponenten von den sichtbar bleibenden Vertragsmarkierungen.
+
 ## Testbarkeit und Preis der Grenzen
 
 Ein Test kann das Gateway durch eine In-Memory-Implementierung ersetzen. Der fachliche Ablauf benötigt dafür keinen Spring-Server. Auch ein späterer Adapterwechsel bleibt möglich, sofern der Vertrag passend geschnitten ist.

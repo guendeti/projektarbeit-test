@@ -1,5 +1,15 @@
 # Prüfprotokoll
 
+## Fachliche Überarbeitung nach Quellenabgleich
+
+Die vier Einstiegsseiten wurden verständlicher aufgebaut und um Qualitätsziele, Randbedingungen, Zielgruppe und die didaktische Begrenzung der beiden Architekturebenen ergänzt. „Besuch erfassen“ ist der fachliche Hauptbegriff. Der kanonische Ablauf enthält keine Vet-Zuordnung; die reale Modulith-Variante ergänzt diese per Event. SCS und Microservices werden als überschneidende Konzepte erklärt; Layered wird nicht auf konkrete Repository-Klassen eingeschränkt.
+
+Das Visit-Diagramm zeigt Controller-Zugriffe auf Fachmodell und Repository getrennt. Ports sind im Explorer Verträge ohne eigene Laufzeitausführung. Nur die Codeansicht zeigt Abhängigkeiten auf diese Interfaces. Ausführbare Varianten nutzen benannte äussere Adapter. Die Beschreibung ist auf 255 Zeichen begrenzt, Demo-spezifische Vereinfachungen sind dokumentiert.
+
+Prüfstand: 56 erfolgreiche Tests einschliesslich 255/256-Zeichen-Grenze und Graph-/Trace-Prüfung ohne ausführende Interfaces. TypeScript/Astro: 30 Dateien, keine Fehler, Warnungen oder Hinweise. Produktionsbuild: 18 HTML-Seiten. Statische Prüfung: 680 lokale Verweise, Anker, Quizoptionen, Metadaten und Sitemap erfolgreich geprüft.
+
+`npm run verify:sources` wurde erfolgreich online ausgeführt. Sechs ausgewählte Quelldateien an vier festen Repository-Commits antworteten mit HTTP 200 und erfüllten die geprüften fachlichen Aussagen. Die konkreten Commits stehen in `src/data/source-snapshots.ts` und im Quellenbereich. Dies ist ein gezielter Beleg für die behandelten Aussagen, kein vollständiger Audit der Repositories. Die unten dokumentierte Grenze der visuellen Browserprüfung gilt weiterhin.
+
 ## Designvereinfachung nach Nutzerfeedback
 
 Die Startseite wurde auf Einleitung und Lernpfad reduziert. Weisse Flächen, schwarze Lerntexte, lokale Systemschriften und blaue Akzente ersetzen die ursprüngliche Gestaltung. Lerntexte verwenden 18 Pixel. Das rechte Inhaltsverzeichnis und die Lesezeitanzeige sind entfernt. Lerninhalte und Interaktionslogik bleiben unverändert.
@@ -32,7 +42,7 @@ Diese Massnahmen sind keine Behauptung einer formell nachgewiesenen WCAG-Konform
 
 Die Browserinventur der verbundenen Computer-Use-Umgebung lieferte keine Browser. Auch das Öffnen eines In-App-Browser-Tabs meldete „Browser is not available: iab“. Deshalb wurden keine visuelle Browserprüfung, kein realer Touch-/Screenreader-Test und keine automatisierten End-to-End-Klicktests durchgeführt. Responsive CSS, Tastaturlogik und ARIA-Attribute wurden implementiert und im Quelltext geprüft; eine manuelle Sichtprüfung bleibt als separater Nachweis offen.
 
-Keine Nutzerstudie mit externen Personen durchgeführt. Keine empirischen Wartbarkeitsmessungen. Quellenlinks und Repository-Hauptbranches sind keine festgeschriebenen wissenschaftlichen Snapshots.
+Keine Nutzerstudie mit externen Personen durchgeführt. Keine empirischen Wartbarkeitsmessungen. Die PetClinic-Repository-Referenzen wurden im Zuge der fachlichen Überarbeitung auf dokumentierte Commits festgelegt; externe Architekturartikel und Framework-Dokumentationen sind weiterhin veränderliche Webquellen.
 
 ## Reproduzieren
 

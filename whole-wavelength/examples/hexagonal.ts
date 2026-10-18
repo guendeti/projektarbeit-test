@@ -12,7 +12,7 @@ export class BookVisitService implements BookVisitInputPort {
   }
   book(command: VisitCommand) {
     this.trace('service', 'BookVisitService implementiert den Input Port.');
-    this.trace('port', 'OwnerRepositoryPort beschreibt den Persistenzbedarf des Kerns.');
+    this.trace('service', 'OwnerRepositoryPort beschreibt den Persistenzbedarf des Kerns.');
     this.trace('persistence', 'Der In-Memory-Adapter beantwortet den Ladeaufruf.');
     const owner = loadOwner(this.owners, command.ownerId);
     this.trace('domain', 'Der Domain-Kern prüft die Eingabe und fügt den Visit hinzu.');
@@ -24,7 +24,7 @@ export class BookVisitService implements BookVisitInputPort {
 }
 export function bookHexagonal(command: VisitCommand, owners: OwnerRepositoryPort, today: string, trace: Trace) {
   trace('web', 'Driving Adapter übersetzt die Formulareingabe.');
-  trace('input', 'Der Adapter ruft den Input Port BookVisitUseCase auf.');
+  trace('web', 'Der Adapter ruft den Input Port BookVisitUseCase auf.');
   const input: BookVisitInputPort = new BookVisitService(owners, today, trace);
   return input.book(command);
 }

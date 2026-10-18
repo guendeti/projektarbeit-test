@@ -1,60 +1,63 @@
 ---
 title: "Die Spring PetClinic kennenlernen"
 slug: "spring-petclinic"
-lead: "Eine kleine Tierarztpraxis liefert uns die gemeinsame Fachdomäne. Owner, Pet, Visit und Vet bleiben dieselben – unabhängig davon, wie wir die Software organisieren."
+lead: "Die Spring PetClinic ist eine Open-Source-Beispielanwendung aus dem Spring-Ökosystem. Sie bildet grundlegende Verwaltungsaufgaben einer Tierarztpraxis ab und liefert unsere gemeinsame Fachdomäne."
 diagram: "petclinic"
-takeaway: "PetClinic ist unsere fachliche Konstante. Das Original, Community-Varianten und eigene Architekturentwürfe werden bewusst auseinandergehalten."
-sources: [petclinic, visit, framework, petclinic-modulith, petclinic-microservices]
-question: "Was bleibt in unserem Architekturvergleich konstant?"
-answers: [Die Anzahl aller Interfaces., Die Deployment-Struktur., Der Use-Case „Visit für ein Pet erfassen“.]
-correct: 2
-explanation: "Gleiche Fachlichkeit macht strukturelle Unterschiede zwischen den Architekturen sichtbar."
+takeaway: "Die PetClinic verbindet unseren Lernpfad. Im kanonischen Visit-Ablauf wird ein Besuch einem Pet zugeordnet, aber kein bestimmter Vet ausgewählt. Community-Varianten können zusätzliche Funktionen besitzen."
+sources: [petclinic, visit, visit-model, petclinic-schema, framework, petclinic-modulith, petclinic-microservices]
+question: "Welche Aussage gilt für den kanonischen Visit-Ablauf?"
+answers: ['Für jeden Visit wird ein bestimmter Vet ausgewählt.', 'Ein Visit wird einem Pet mit Datum und Beschreibung zugeordnet.', 'Jeder Visit benötigt einen separaten Microservice.']
+correct: 1
+explanation: "Das Original ordnet den Visit einem Pet zu. Eine Auswahl eines bestimmten Tierarztes gehört nicht zu diesem Ablauf."
 ---
-## Vier Begriffe für die Tierarztpraxis
+## Eine Anwendung als gemeinsames Beispiel
 
-| Begriff | Bedeutung | Beispiel |
+Die kanonische Implementierung im Repository **spring-projects/spring-petclinic** verwendet Spring Boot und Thymeleaf. Sie enthält Weboberfläche, Anwendungsfunktion und Persistenz in einer gemeinsam gestarteten Anwendung.
+
+Die Fachdomäne ist überschaubar. Ausserdem existieren Community-Varianten mit anderen Strukturen. Das macht die PetClinic zu einem geeigneten Lernbeispiel für den Vergleich von Architekturentscheidungen.
+
+## Die wichtigsten Fachobjekte
+
+| Objekt | Bedeutung | Beispiel |
 | --- | --- | --- |
-| Owner | Tierhalterin oder Tierhalter | Lea Keller |
-| Pet | Ein Tier eines Owners | Milo, eine Katze |
-| Visit | Besuch beziehungsweise Behandlungstermin | Vorsorgeuntersuchung |
-| Vet | Tierärztin oder Tierarzt | Dr. Meier |
+| Owner | Tierhalter mit einem oder mehreren Haustieren | Lea Keller |
+| Pet | Haustier, das einem Owner zugeordnet ist | Milo, eine Katze |
+| Visit | Erfasster Besuch eines Pets mit Datum und Beschreibung | Vorsorgeuntersuchung |
+| Vet | Tierarzt, gegebenenfalls mit Fachgebieten | Dr. Meier |
 
-Ein Owner kann mehrere Pets besitzen. Ein Pet kann mehrere Visits haben. Die Veterinärverwaltung enthält zusätzliche Informationen wie Fachgebiete. Für unseren Visit-Vergleich benötigen wir hauptsächlich Owner, Pet und Visit.
+Ein Owner kann mehrere Pets besitzen. Ein Pet kann wiederum mehrere Visits haben.
 
-## Die kanonische Anwendung
+**Wichtig:** Vet gehört zur Fachdomäne. Im hier untersuchten kanonischen Visit-Use-Case wird jedoch kein bestimmter Vet zugewiesen. Das Visit-Modell und die zugehörige Tabelle enthalten keine solche Zuordnung.
 
-Das Repository **spring-projects/spring-petclinic** ist die kanonische Spring-Boot-/Thymeleaf-Implementierung. Es enthält Weboberfläche, Anwendungsfunktion und Persistenz in einer gemeinsam gestarteten Anwendung.
+## Welche Funktionen bietet die PetClinic?
 
-Die PetClinic ist ein Lern- und Demonstrationsprojekt. Ihr kompakter Umfang macht Beziehungen sichtbar, die in einer grossen Unternehmensanwendung durch viele zusätzliche Funktionen verdeckt wären.
+Die Anwendung ermöglicht insbesondere die Suche und Verwaltung von Tierhaltern, die Verwaltung ihrer Haustiere, das Erfassen von Besuchen sowie das Anzeigen von Tierärzten.
 
-## Ein Beispiel, mehrere Varianten
+Die Bedienung erfolgt über eine Weboberfläche. Um einen Visit zu erfassen, wird zunächst ein Owner gesucht. Auf dessen Detailseite wird beim gewünschten Pet das Formular für einen neuen Visit geöffnet. Nach einer gültigen Eingabe speichert die Anwendung den Besuch und kehrt zur Detailansicht des Owners zurück.
+
+## Unser gemeinsamer Use-Case
+
+Lea erfasst für Milo einen Besuch mit Datum und Beschreibung. Die Anwendung bestimmt Owner und Pet, prüft die Eingabe und speichert den Visit.
+
+Wir nennen das **„Besuch erfassen“**. Der betrachtete Originalablauf enthält keine vollständige Terminplanung mit Uhrzeit, freien Kapazitäten oder einer auswählbaren Tierärztin beziehungsweise einem auswählbaren Tierarzt.
+
+Auf der Codeebene verwenden unsere eigenen Lehrbeispiele immer diesen fachlichen Kern. So werden Veränderungen der Verantwortlichkeiten und Abhängigkeiten sichtbar.
+
+## Original, Community-Variante oder eigener Entwurf?
 
 | Variante | Rolle in dieser Microsite |
 | --- | --- |
 | Kanonische Spring PetClinic | Ausgangspunkt für Monolith und Visit-Ablauf |
 | Spring Framework PetClinic | Referenz für eine explizite Service-Schicht |
-| PetClinic Modulith | Reales Community-Beispiel für fachliche Module |
-| PetClinic Microservices | Reales Community-Beispiel für verteilte Services |
+| PetClinic Modulith | Community-Beispiel für fachliche Module und Events |
+| PetClinic Microservices | Community-Beispiel für verteilte Services |
 | SCS-PetClinic | Eigener konzeptioneller Entwurf |
-| Clean, Hexagonal und Onion hier | Eigene didaktische Refactorings |
+| Layered, Clean, Hexagonal und Onion hier | Eigene didaktische Refactorings des Visit-Kerns |
 
-Die eigenen Varianten sind keine Behauptung über den Aufbau des Original-Repositories. Ihre Aufgabe ist, die Prinzipien anhand derselben Fachfunktion nachvollziehbar zu machen.
+Die realen Varianten sind nicht funktionsgleich. Die betrachtete Modulith-Variante ergänzt beispielsweise nach einem VisitBooked-Event eine Tierarztzuweisung. Das ist zusätzliche Fachfunktion und keine notwendige Eigenschaft eines Modular Monolith.
 
-## Unser roter Faden
+## Was unsere Beispiele vereinfachen
 
-Lea möchte für ihre Katze Milo einen Besuch buchen. Die Anwendung erhält Owner-ID, Pet-ID, Datum und Beschreibung. Sie findet das Tier, prüft die Eingabe und speichert den Visit.
+Im Explorer verwenden wir fiktive Daten und einen In-Memory-Speicher im Browser. Die Beispiele sind ausführbar, aber keine vollständigen Spring-Anwendungen. Sie demonstrieren gezielt Architekturgrenzen.
 
-```text
-ownerId:     1
-petId:       1
-date:        ein zukünftiger Tag
-description: Vorsorgeuntersuchung
-```
-
-Die Beispieldaten sind fiktiv. Der Explorer speichert nichts auf einem Server: Er führt die Demonstration im Browser aus.
-
-## Was wir bewusst vereinfachen
-
-Wir lassen Anmeldung, Abrechnung und reale Terminverfügbarkeit weg. Auch die Diagramme zeigen nicht jedes Framework-Detail. So vergleichen wir Verantwortlichkeiten und Abhängigkeiten, ohne fachlich unterschiedliche Produkte zu erfinden.
-
-Die Repositories entwickeln sich weiter. Die Quellen führen zu den Originalprojekten; für reproduzierbare wissenschaftliche Aussagen sollte zusätzlich ein untersuchter Commit oder Tag festgehalten werden.
+Die Referenzen verlinken Originalquellen. Aussagen zum Repository-Verhalten beziehen sich auf den jeweils dokumentierten Quellstand; spätere Änderungen am Hauptbranch können davon abweichen.

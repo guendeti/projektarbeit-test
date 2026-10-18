@@ -31,19 +31,21 @@ Die Strukturprüfung kann beispielsweise zyklische Modulabhängigkeiten und uner
 
 ## Die Community-PetClinic
 
-Die Modulith-Variante der PetClinic zeigt die Module owner, vet und system. Sie demonstriert ausserdem Kommunikation über Application Events. Beim Buchen eines Visits kann das Owner-Modul ein Ereignis veröffentlichen, auf das das Vet-Modul reagiert.
+Die betrachtete Modulith-Variante der PetClinic zeigt die Module owner, vet und system. Beim Erfassen eines Visits veröffentlicht das Owner-Modul ein VisitBooked-Event. Das Vet-Modul reagiert darauf und weist einen Tierarzt zu.
 
 ```text
 owner ── VisitBooked ──▶ vet
 ```
 
-Ein internes Application Event ist nicht automatisch eine Netzwerk-Nachricht. Auch sein Zustellungs- und Transaktionsverhalten muss bewusst festgelegt werden.
+Diese Tierarztzuweisung erweitert den kanonischen Visit-Ablauf. Sie ist zusätzliche Fachfunktion dieser Community-Variante und keine notwendige Eigenschaft eines Modular Monolith. Wir vergleichen auf Systemebene deshalb denselben fachlichen Kern, nicht vollständig identische Anwendungen.
+
+Der Pfeil zeigt hier die Ereignisübermittlung von owner zu vet. Die Code-Abhängigkeit verläuft umgekehrt: Das Vet-Modul kennt den vom Owner-Modul veröffentlichten Event-Typ. Ein internes Application Event ist nicht automatisch eine Netzwerk-Nachricht. Auch Zustellung und Transaktionsverhalten müssen bewusst festgelegt werden.
 
 ## Was ändert sich für den Visit?
 
 Der Use-Case kann vollständig im Owner-Modul bleiben. Andere Module müssen seine Controller und Persistenzklassen nicht kennen. Benötigen sie eine Information, nutzen sie eine veröffentlichte API oder ein definiertes Event.
 
-Damit liegt die fachliche Entscheidung über das Buchen dort, wo Owner, Pet und Visit zusammengehören. Die Modulgrenze schützt diesen Zusammenhang.
+Damit liegt die Verantwortung für das Erfassen dort, wo Owner, Pet und Visit zusammengehören. Die spätere Tierarztzuweisung ist eine eigene Reaktion im Vet-Modul. Die Modulgrenzen schützen diese Verantwortlichkeiten.
 
 ## Stärken und Aufwand
 

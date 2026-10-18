@@ -12,7 +12,8 @@
     "astro": "astro",
     "test": "node --test examples/architectures.test.ts examples/graphs.test.ts",
     "check": "astro check",
-    "verify": "node scripts/verify-build.mjs"
+    "verify": "node scripts/verify-build.mjs",
+    "verify:sources": "node scripts/verify-sources.mjs"
   },
   "dependencies": {
     "astro": "^7.4.0"

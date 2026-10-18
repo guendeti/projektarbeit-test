@@ -93,6 +93,8 @@ Controller → Service → Data Access → Datenbank
 
 Layered Architecture verbietet Dependency Inversion nicht. Wir vergleichen hier bewusst die klassische Richtung. Eine geschichtete Anwendung mit inneren Interfaces kann bereits Eigenschaften von Clean oder Hexagonal erfüllen.
 
+Auch ein Repository-Interface in einer klassischen Datenschicht kann austauschbare Implementierungen und Tests mit Ersatzobjekten ermöglichen. Für Dependency Inversion ist zusätzlich entscheidend, wem der Vertrag gehört und welche Abhängigkeiten er selbst mitbringt. Die Alternative lautet deshalb nicht „Layered ohne Interfaces“ gegen „Clean mit Interfaces“.
+
 ## Stärken und Grenzen
 
 Der Ansatz ist leicht nachvollziehbar und reduziert den Einstieg in kleine Anwendungen. Ein Risiko sind Schichten, die nur weiterreichen, oder fachliche Logik, die zwischen Controller und Datenzugriff verstreut bleibt. Die Anzahl der Schichten allein garantiert keine gute Verantwortungsverteilung.

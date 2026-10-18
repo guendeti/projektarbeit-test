@@ -30,6 +30,7 @@ npm run verify
 - `src/content/lernen/`: 13 Markdown-Lernkapitel, gegliedert nach Grundlagen, PetClinic, System- und Codeebene.
 - `src/content.config.ts`: validiertes Schema für Inhalte und Verständnisfragen.
 - `src/data/site.ts`: Lernpfad, Quellen und zentrale URL-Funktion für den Pages-Basispfad.
+- `src/data/source-snapshots.ts`: dokumentierte Commit-Stände der vier PetClinic-Referenzprojekte.
 - `src/data/explorer.ts`: Komponenten und getrennte Aufruf-/Abhängigkeitsgraphen.
 - `src/components/ArchitectureDiagram.astro`: eigene SVG-Architekturdiagramme.
 - `src/layouts/SiteLayout.astro`: Kopfzeile, Sidebar, Suche und mobile Navigation.
@@ -46,7 +47,11 @@ Die Suche durchsucht Kapiteltitel und Themenzuordnungen mit einigen Synonymen, n
 
 ## Fachliche Einordnung
 
-Kanonische PetClinic, Community-Varianten und eigene Refactorings werden getrennt gekennzeichnet. Die SCS-PetClinic ist ein konzeptioneller Entwurf. Java-Ausschnitte sind didaktische Skizzen. Die ausführbaren TypeScript-Beispiele sind keine vollständigen Spring-Anwendungen. Quellen sind im Lernpfad und unter `/quellen/` verlinkt. Für wissenschaftliche Reproduzierbarkeit müssen untersuchte Repository-Commits gesondert fixiert werden.
+Kanonische PetClinic, Community-Varianten und eigene Refactorings werden getrennt gekennzeichnet. Auf Systemebene vergleichen wir denselben fachlichen Kern; die reale Modulith-Variante ergänzt eine Vet-Zuordnung. Unsere vier Code-Lehrbeispiele verwenden denselben Visit-Ablauf. Die SCS-PetClinic ist ein konzeptioneller Entwurf. Java-Ausschnitte sind didaktische Skizzen. Die ausführbaren TypeScript-Beispiele sind keine vollständigen Spring-Anwendungen. Quellen und feste Repository-Commits sind im Lernpfad und unter `/quellen/` verlinkt.
+
+`npm run verify:sources` prüft mit Internetzugang ausgewählte Quellstellen an diesen Commits: Controller-Ablauf, 255-Zeichen-Grenze, Datenmodell ohne Vet-Zuordnung, Modulith-Erweiterung sowie Service- und Schichtenstruktur. Die Online-Prüfung ist bewusst vom normalen Build getrennt.
+
+Der Explorer zeigt Laufzeitaufrufe zwischen ausführenden Komponenten. Eingangs- und Ausgangsports bleiben als anklickbare Verträge sichtbar, führen aber keine eigenen Schritte aus. Der Code-Modus zeigt die Abhängigkeiten zu diesen Verträgen. Die Beschreibungsgrenze der Demo beträgt wie beim betrachteten Original 255 Zeichen; Trimming und explizite Datumsvalidierung sind Demo-Details.
 
 ## GitHub Pages
 

@@ -8,6 +8,10 @@ Lernpfad: Grundlagen → System-/Codeebene → PetClinic → Monolith → Modula
 
 Alle 13 Lernseiten enthalten Einführung, eigenes SVG-Diagramm, Erklärung, PetClinic-Bezug, Merksatz, Verständnisfrage und Quellen. Kapitel der System- und Codeebene beginnen mit einem kurzen Perspektivwechsel. Codevarianten verwenden dieselben Fachregeln. SCS bleibt ausdrücklich ein eigener Entwurf.
 
+Die Einstiegsseiten erklären zuerst Problem, Fachdomäne und Leitfragen. Ports und Dependency Inversion werden erst auf der Codeebene vertieft. „Gleiche Fachlichkeit“ gilt für unsere vier Code-Lehrbeispiele; reale Community-Varianten können zusätzliche Funktionen enthalten. Der Quellenbereich dokumentiert vier feste Repository-Commits und ordnet konkrete Aussagen den jeweiligen Quellstellen zu.
+
+Im Explorer sind Verträge keine zusätzlichen Laufzeitstationen. Laufzeitpfeile verbinden ausführende Komponenten und nennen den verwendeten Vertrag. Die anklickbaren Vertragsmarkierungen bleiben zur Orientierung sichtbar; in der Codeansicht sind sie Ziele der Abhängigkeits- und Implementierungsbeziehungen. Das Ablaufprotokoll spielt aufgezeichnete Ausführungsschritte ab.
+
 ## Technologieentscheid
 
 | Kriterium | Astro + Markdown | Vanilla HTML/CSS/TypeScript |

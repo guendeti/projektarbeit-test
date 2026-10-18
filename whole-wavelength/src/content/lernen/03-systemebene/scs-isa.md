@@ -16,6 +16,8 @@ Ein Self-contained System ist eine autonome Webanwendung. Für seinen fachlichen
 
 Ein SCS ist daher nicht einfach ein grösserer Backend-Microservice. Seine Grenze umfasst eine nutzbare Fachfunktion über die technischen Schichten hinweg. Wo sinnvoll, werden Abhängigkeiten zwischen SCS asynchron gestaltet; die Integration kann auch über Links und die Benutzeroberfläche erfolgen.
 
+Die Begriffe sind keine ausschliessenden Kategorien: Auch Microservices können UI-Verantwortung umfassen. Ein SCS kann intern aus mehreren Microservices bestehen. Entscheidend für SCS sind sein nutzbarer fachlicher Ausschnitt und seine Autonomie, nicht allein eine zusätzliche Oberfläche.
+
 ## Unser PetClinic-Entwurf
 
 **Die folgende Aufteilung ist unser konzeptioneller Entwurf. Sie ist keine offizielle PetClinic-Variante.**
@@ -45,6 +47,8 @@ Independent Systems Architecture ist eine Sammlung von Prinzipien für weitgehen
 | Betrieb standardisieren | Gemeinsame Regeln für Logging, Monitoring und Konfiguration |
 | Standards an Schnittstellen erzwingen | Verträge prüfen, interne Technologie offenlassen |
 | Resilienz | Mit Ausfällen und unerwarteten Neustarts umgehen |
+
+Die Tabelle fasst die Prinzipien zusammen. Die Original-Spezifikation unterscheidet verbindliche Anforderungen (must) und Empfehlungen (should): Insbesondere Betriebsstandardisierung und die Durchsetzung von Standards an Schnittstellen sind Empfehlungen. ISA lässt ausserdem synchronen, asynchronen und UI-basierten Integrationen Raum; das ist nicht identisch mit der SCS-Empfehlung, synchrone Abhängigkeiten im eigenen Anfragezyklus zu vermeiden.
 
 ## Macro und Micro Architecture
 

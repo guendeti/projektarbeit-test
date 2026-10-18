@@ -4,6 +4,7 @@ import { url } from '../data/site';
 import { todayISO } from '../../examples/domain.ts';
 import type { Trace, VisitCommand } from '../../examples/domain.ts';
 import { MemoryOwnerStore } from '../../examples/memory.ts';
+import { MemoryOwnerGateway, MemoryOwnerAdapter, MemoryOwnerRepository } from '../../examples/adapters.ts';
 import { bookLayered } from '../../examples/layered.ts';
 import { bookClean } from '../../examples/clean.ts';
 import { bookHexagonal } from '../../examples/hexagonal.ts';
@@ -23,7 +24,8 @@ const outerNodes: GraphNode[] = [
 function nodeMarkup(node: GraphNode) {
   const outer = node.id === 'user' || node.id === 'database';
   const w = outer ? 73 : 136;
-  return `<g class="node ${node.kind || ''} ${selected === node.id ? 'selected' : ''}" data-node="${node.id}" role="button" tabindex="0" aria-label="${escape(node.label)}: Details anzeigen" aria-pressed="${selected === node.id}"><rect x="${node.x - w / 2}" y="${node.y - 29}" width="${w}" height="58" rx="7"/><text x="${node.x}" y="${node.y - 4}" text-anchor="middle" class="node-sub">${escape(node.sub)}</text><text x="${node.x}" y="${node.y + 14}" text-anchor="middle" style="font-size:${outer ? '10' : '10.5'}px">${escape(node.label)}</text></g>`;
+  const contract = node.kind === 'port';
+  return `<g class="node ${node.kind || ''} ${selected === node.id ? 'selected' : ''}" data-node="${node.id}" role="button" tabindex="0" aria-label="${escape(node.label)}${contract ? ', Vertrag ohne eigene Ausführung' : ''}: Details anzeigen" aria-pressed="${selected === node.id}"><rect x="${node.x - w / 2}" y="${node.y - 29}" width="${w}" height="58" rx="7"/>${contract ? `<text x="${node.x}" y="${node.y - 37}" text-anchor="middle" class="node-sub">«interface» · Vertrag</text>` : ''}<text x="${node.x}" y="${node.y - 4}" text-anchor="middle" class="node-sub">${escape(node.sub)}</text><text x="${node.x}" y="${node.y + 14}" text-anchor="middle" style="font-size:${outer ? '10' : '10.5'}px">${escape(node.label)}</text></g>`;
 }
 function edgeMarkup(edge: Edge, nodes: GraphNode[]) {
   const from = nodes.find(n => n.id === edge.from)!;
@@ -104,7 +106,8 @@ form.addEventListener('submit', async event => {
   $('trace-log').replaceChildren(); $('run-empty').hidden = true;
   const values = new FormData(form);
   const command: VisitCommand = { ownerId: 1, petId: Number(values.get('petId')), date: String(values.get('date')), description: String(values.get('description')) };
-  const store = new MemoryOwnerStore();
+  const stores = { layered: MemoryOwnerStore, clean: MemoryOwnerGateway, hexagonal: MemoryOwnerAdapter, onion: MemoryOwnerRepository };
+  const store = new stores[architecture]();
   const steps: { component: string; message: string }[] = [];
   const trace: Trace = (component, message) => steps.push({ component, message });
   let error: string | undefined;

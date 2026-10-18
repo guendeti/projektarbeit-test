@@ -1,55 +1,63 @@
 ---
 title: "System- und Codeebene"
 slug: "system-und-codeebene"
-lead: "Bevor wir Architekturen vergleichen, brauchen wir eine gemeinsame Perspektive. Betrachten wir die Grenzen des Gesamtsystems – oder die Verantwortlichkeiten innerhalb einer einzelnen Anwendung?"
+lead: "Softwarearchitektur lässt sich aus unterschiedlichen Perspektiven betrachten. Wir unterscheiden die Aufteilung des Gesamtsystems von der internen Organisation einer Anwendung oder eines Services."
 diagram: "zoom"
-takeaway: "Systemebene und Codeebene beantworten unterschiedliche Fragen. Ein Microservice kann intern beispielsweise hexagonal aufgebaut sein."
+takeaway: "Die Systemebene betrachtet Zerlegung, Kommunikation und Betrieb des Gesamtsystems. Die Codeebene untersucht Verantwortlichkeiten und Abhängigkeiten innerhalb einer Anwendung."
 sources: [layering, microservices, modulith, isa]
 question: "Kann ein Microservice intern Layered Architecture verwenden?"
 answers: ['Ja, System- und Codearchitektur sind kombinierbar.', 'Nein, Microservices ersetzen alle Schichten.', 'Nur wenn er keine Datenbank verwendet.']
 correct: 0
-explanation: "Microservices definieren die Service-Grenzen; Layered beschreibt die interne Organisation eines Services."
+explanation: "Microservices definieren Service-Grenzen; Layered beschreibt die interne Organisation eines Services."
 ---
-## Systemebene: das Ganze zerlegen
+## Systemebene: Wie ist die Anwendung als Ganzes aufgebaut?
 
-Die Systemebene beantwortet: **Wie wird die gesamte Anwendung in ausführbare beziehungsweise fachlich eigenständige Teile zerlegt, deployt und miteinander verbunden?**
+Die Systemebene betrachtet die Struktur des Gesamtsystems. Beispielsweise kann die PetClinic als gemeinsame Anwendung ausgeführt oder auf mehrere unabhängig deploybare Services verteilt werden.
 
-Wir betrachten Monolith, Modular Monolith, Microservices und Self-contained Systems. Interessant sind Prozessgrenzen, Deployment-Einheiten, Netzwerkkommunikation und fachliche Autonomie.
+Die zentralen Fragen lauten:
 
-Ein Modul ist dabei nicht automatisch ein Prozess. Im Modular Monolith bleiben alle Module in derselben Anwendung. Erst separate Deployments verändern auch die physische Struktur.
+- Welche fachlichen Teile gibt es?
+- Wo verlaufen Modul- und Systemgrenzen?
+- Welche Teile werden gemeinsam oder unabhängig deployt, also bereitgestellt?
+- Wie kommunizieren getrennte Systemteile?
 
-## Codeebene: in eine Einheit hineinzoomen
+Wir betrachten Monolith, Modular Monolith, Microservices und Self-contained Systems. ISA ergänzt Prinzipien für unabhängige Systeme.
 
-Die Codeebene beantwortet: **Wie werden Verantwortlichkeiten und Abhängigkeiten innerhalb einer Anwendung oder eines einzelnen Services organisiert?**
+Ein Modul ist nicht automatisch ein eigener Prozess. Im Modular Monolith laufen die fachlichen Module weiterhin in einer gemeinsamen Anwendung.
 
-Hier betrachten wir Layered, Clean, Hexagonal und Onion Architecture. Wir fragen, wer den Use-Case koordiniert, wo ein Persistenzvertrag liegt und ob Fachlogik ein bestimmtes Framework kennen muss.
+## Codeebene: Wie ist eine Anwendung intern organisiert?
+
+Die Codeebene betrachtet Verantwortlichkeiten und Quellcode-Abhängigkeiten innerhalb einer Anwendung oder eines Services.
+
+Beim Erfassen eines Besuchs müssen beispielsweise HTTP-Anfragen verarbeitet, fachliche Regeln geprüft und Daten gespeichert werden. Die Fragen dazu lauten:
+
+- Wo befindet sich die fachliche Logik?
+- Welche Aufgaben übernimmt der Controller?
+- Wie wird die Persistenz, also das Laden und Speichern von Daten, angebunden?
+- Von welchen technischen Details ist die Fachlogik abhängig?
+
+Hier vergleichen wir Layered, Clean, Hexagonal und Onion Architecture. Den Begriff Use-Case verwenden wir für einen fachlichen Anwendungsfall: bei uns das Erfassen eines Visits.
+
+## Wie hängen beide Perspektiven zusammen?
+
+Ein Microservice kann intern beispielsweise nach Clean Architecture aufgebaut sein. Ein Modular Monolith kann fachliche Module enthalten, die jeweils eine eigene interne Schichtenstruktur besitzen.
 
 ```text
 Gesamtsystem
-└── ein Service oder eine Anwendung
-    └── Visit-Use-Case
-        ├── Web
-        ├── Anwendung & Domäne
-        └── Persistenz
+└── eine Anwendung / ein Service
+    └── interne Organisation des Visit-Use-Cases
 ```
+
+Die Zweiteilung ist eine didaktische Vereinfachung und keine allgemeingültige, vollständige Einteilung der Softwarearchitektur. Beide Perspektiven beeinflussen sich, sind aber nicht identisch.
 
 ## Logische Schichten sind keine Server
 
-Eine Presentation-, Business- und Data-Access-Schicht kann vollständig in einem Java-Prozess laufen. Umgekehrt kann ein verteiltes System mehrere Anwendungen enthalten, die jeweils intern mehrere Schichten besitzen. Die Anzahl der Schichten sagt deshalb nichts über die Anzahl der Deployments aus.
+Presentation, Fachlogik und Datenzugriff können vollständig in einem Prozess laufen. Umgekehrt kann ein verteiltes System mehrere Anwendungen enthalten, die intern jeweils mehrere Schichten besitzen.
 
-Die Trennung ist didaktisch hilfreich, aber nicht absolut: Fachliche Modulgrenzen können die Grundlage für spätere Service-Grenzen bilden. Eine Verteilung ersetzt die Arbeit an diesen Grenzen jedoch nicht.
+Die Zahl der Schichten sagt deshalb nichts über die Zahl der Deployments aus. Ebenso garantiert eine Verteilung über mehrere Prozesse noch keine gute fachliche Modularisierung.
 
-## Zwei Arten von Pfeilen
+## Was bedeuten die Pfeile?
 
-**Laufzeitfluss** beschreibt, wer während der Verarbeitung wen aufruft. **Code-Abhängigkeit** beschreibt, welcher Code einen anderen Typ oder Vertrag kennen muss.
+Ein Diagramm braucht eine eindeutige Bedeutung seiner Beziehungen. Ein **Laufzeitaufruf** zeigt, wer während der Verarbeitung wen aufruft. Eine **Code-Abhängigkeit** zeigt, welcher Code einen anderen Typ oder Vertrag kennt.
 
-```text
-Laufzeit:           Use-Case → Persistenzadapter
-Code-Abhängigkeit:  Persistenzadapter → inneres Repository-Interface
-```
-
-Das Interface wird zur Laufzeit von einem äusseren Adapter implementiert. Der Use-Case muss deshalb den konkreten Adapter nicht kennen. Diese Unterscheidung wird im Explorer ausdrücklich umschaltbar.
-
-## Kombinationen sind erwünscht
-
-Ein Modular Monolith kann ein hexagonales Owner-Modul enthalten. In einer Microservice-Landschaft kann der Customers Service klassisch geschichtet sein, während der Visits Service Clean Architecture verwendet. ISA nennt die systemweiten Regeln Macro Architecture und die intern frei wählbare Struktur Micro Architecture.
+Diese Richtungen müssen nicht übereinstimmen. Wie das mit Interfaces funktioniert, untersuchen wir auf der Codeebene und im Explorer. Zunächst lernen wir die gemeinsame Beispielanwendung kennen.

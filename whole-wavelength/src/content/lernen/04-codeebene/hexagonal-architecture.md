@@ -35,6 +35,8 @@ Test    → Testadapter     → BookVisitUseCase
 
 Der BookVisitService implementiert den Eingangsport. Ein Test kann ihn ohne Webframework aufrufen.
 
+Der Port ist ein Vertrag und keine zusätzliche ausführende Station. Zur Laufzeit ruft der Webadapter den BookVisitService **über** diesen Vertrag auf. Der Testadapter kann denselben Service über denselben Vertrag ansprechen.
+
 ## Driven Side: etwas von aussen benötigen
 
 Für unseren Ablauf muss die Anwendung Owner laden und speichern. Sie definiert einen Output Port:
@@ -53,6 +55,8 @@ BookVisitService → OwnerRepositoryPort ← JpaOwnerAdapter
 ```
 
 Beide Pfeile zeigen Code-Abhängigkeiten auf den inneren Vertrag. Zur Laufzeit gelangt der Aufruf durch den Port zur eingesetzten Implementierung.
+
+Auch der Output Port führt selbst keine Datenbankoperation aus. Der Service ruft eine Methode des eingesetzten Adapters über den Port auf. Das Architekturdiagramm oben zeigt die Verträge und Code-Abhängigkeiten; im Explorer werden Laufzeitaufrufe zwischen den ausführenden Komponenten getrennt davon dargestellt.
 
 ## Eine mögliche Projektstruktur
 

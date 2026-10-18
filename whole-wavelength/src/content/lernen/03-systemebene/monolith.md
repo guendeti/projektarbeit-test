@@ -35,7 +35,9 @@ Beim Erfassen eines Visits werden keine anderen PetClinic-Services über das Net
 Im kanonischen Visit-Ablauf besitzt der VisitController eine direkte Abhängigkeit zum OwnerRepository. Er lädt den Owner, bestimmt das Pet, verarbeitet die Eingabe und speichert den veränderten Owner. Eine separate Service-Schicht ist in diesem Ablauf nicht vorhanden.
 
 ```text
-VisitController → Owner / Pet / Visit → OwnerRepository
+VisitController
+├── verwendet Owner / Pet / Visit
+└── lädt und speichert über OwnerRepository
 ```
 
 Diese interne Struktur ist eine zusätzliche Entscheidung. Sie ist nicht die Definition eines Monolithen.

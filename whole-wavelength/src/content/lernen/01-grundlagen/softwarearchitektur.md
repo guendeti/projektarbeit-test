@@ -1,49 +1,47 @@
 ---
 title: "Was ist Softwarearchitektur?"
 slug: "softwarearchitektur"
-lead: "Softwarearchitektur beschreibt die grundlegende Struktur einer Anwendung – ihre Bausteine, deren Verantwortung und die Beziehungen zwischen ihnen. Sie hilft uns, bewusste Entscheidungen über Veränderbarkeit, Betrieb und Komplexität zu treffen."
+lead: "Softwarearchitektur beschreibt die grundlegende Struktur und die wichtigen Entwurfsentscheidungen eines Softwaresystems: seine Bausteine, ihre Verantwortung und ihr Zusammenspiel."
 diagram: "zoom"
-takeaway: "Architektur ist eine bewusste Entscheidung über Grenzen und Abhängigkeiten. Ein Muster ist ein Werkzeug, kein Qualitätsversprechen."
-sources: [layering, microservices, clean]
+takeaway: "Softwarearchitektur bedeutet, Verantwortlichkeiten, Abhängigkeiten und Grenzen bewusst zu gestalten – passend zu den Qualitätszielen und Randbedingungen des Systems."
+sources: [architecture, layering, microservices]
 question: "Welche Frage ist eine Architekturfrage?"
-answers: [Welche Farbe hat ein Button?, Welche Teile können unabhängig deployt werden?, Wie heisst eine lokale Variable?]
+answers: ['Welche Farbe hat ein einzelner Button?', 'Welche Teile können unabhängig deployt werden?', 'Wie heisst eine lokale Variable?']
 correct: 1
 explanation: "Die Deployment-Grenze beeinflusst Struktur, Zusammenarbeit und Betrieb des Gesamtsystems."
 ---
-## Mehr als Kästen und Pfeile
+## Warum ist Softwarearchitektur wichtig?
 
-Stell dir eine Tierarztpraxis vor. Die Software verwaltet Tierhalter, Tiere und Besuche. Doch dieselbe Fachlichkeit kann ganz unterschiedlich organisiert sein: als eine Anwendung, als klar abgegrenzte Module oder als mehrere Services. Innerhalb jeder Anwendung können Controller, Fachlogik und Persistenz wiederum unterschiedlich zusammenarbeiten.
+Stell dir eine Tierarztpraxis vor. Ihre Anwendung verwaltet Tierhalter, Haustiere, Tierärzte und Besuche. Am Anfang ist sie klein. Später könnten Rechnungsstellung oder Benachrichtigungen hinzukommen.
 
-Ein Architekturdiagramm macht solche Entscheidungen sichtbar. Entscheidend ist, was seine Kästen und Pfeile bedeuten: Ist ein Kasten ein Java-Package, ein Prozess oder ein eigenständig deploybares System? Bedeutet ein Pfeil einen Methodenaufruf oder eine Quellcode-Abhängigkeit? Ohne diese Bedeutung bleibt das Bild mehrdeutig.
+Ohne klare Verantwortlichkeiten kann es schwierig werden, eine Funktion zu ändern, ohne andere Funktionen unbeabsichtigt zu beeinflussen. Softwarearchitektur hilft, solche Abhängigkeiten bewusst zu gestalten.
 
-## Die Fragen hinter der Struktur
+Dabei geht es um mehr als Klassen und Ordner. Architekturentscheidungen beeinflussen beispielsweise, wie sich Teile eines Systems ändern, testen, betreiben und erweitern lassen.
 
-Architektur hilft, wiederkehrende Fragen zu beantworten:
+## Drei Fragen als Ausgangspunkt
 
-- **Verantwortung:** Welcher Baustein trifft eine fachliche Entscheidung?
-- **Abhängigkeiten:** Welche Bausteine müssen andere Bausteine kennen?
-- **Änderungen:** Welche Teile werden bei einer Änderung gemeinsam angepasst?
-- **Betrieb:** Was wird gemeinsam gestartet, skaliert und veröffentlicht?
-- **Grenzen:** Welche Details dürfen andere Teile sehen?
+1. **Verantwortlichkeiten:** Welcher Baustein übernimmt welche Aufgabe?
+2. **Abhängigkeiten:** Welche Bausteine kennen oder benötigen einander?
+3. **Grenzen:** Welche Teile sollen unabhängig verändert oder betrieben werden können?
 
-Ein Architekturansatz setzt dabei einen Schwerpunkt. Microservices betreffen vor allem separat deploybare Services. Clean Architecture beschäftigt sich besonders mit der Richtung von Code-Abhängigkeiten. Beide beschreiben unterschiedliche Aspekte und können gemeinsam eingesetzt werden.
+Ein Baustein kann je nach Perspektive beispielsweise ein fachliches Modul, eine ausführbare Anwendung oder eine Gruppe zusammengehöriger Klassen sein. Deshalb klären wir im nächsten Kapitel, auf welcher Ebene wir das System betrachten.
 
-## Ein Beispiel statt wechselnder Fachlichkeit
+## Qualitätsziele und Randbedingungen
 
-In diesem Lernpfad verwenden wir durchgehend die Spring PetClinic. Auf der Systemebene betrachten wir die Tierarztpraxis als Ganzes. Auf der Codeebene verfolgen wir immer denselben Use-Case: **Für ein bestehendes Pet einen Visit erfassen.**
+Eine Struktur ist nicht allein deshalb passend, weil sie einem bekannten Muster folgt. Zuerst müssen wir wissen, welche Eigenschaften für die Anwendung wichtig sind.
 
-```text
-Owner existiert → Pet gehört zum Owner → Visit wird erfasst
-```
+Soll ein Team Funktionen unabhängig veröffentlichen können? Müssen fachliche Regeln ohne Webserver getestet werden? Wie viel Betriebsaufwand kann das Team tragen? Auch vorhandene Technologien, Zeit und Teamgrösse begrenzen die Möglichkeiten.
 
-Damit bleibt der fachliche Ablauf vergleichbar. Wenn sich eine Klasse oder eine Schnittstelle verändert, sehen wir, welche Architekturentscheidung dahintersteht.
+Solche Ziele können miteinander in Konflikt stehen. Separate Services ermöglichen beispielsweise unabhängige Deployments, benötigen aber zusätzliche Mechanismen für Kommunikation und Betrieb. Ein Deployment ist das Bereitstellen einer ausführbaren Version der Anwendung.
 
-## Es gibt keinen universellen Sieger
+## Architektur ist eine Abwägung
 
-Jede Grenze hat einen Preis. Ein Interface kann Technik austauschbar machen, benötigt aber einen Vertrag und eine Implementierung. Ein eigener Service schafft eine Prozessgrenze, bringt aber Netzwerkfehler, unabhängige Deployments und Überwachung mit sich.
+Es gibt keinen Ansatz, der für jede Anwendung optimal ist. Eine einfache Struktur kann schnell verständlich und leicht umzusetzen sein. Zusätzliche Abstraktionen können bestimmte Änderungen isolieren, erzeugen aber auch zusätzliche Schnittstellen und Implementierungsaufwand.
 
-Für eine kleine Anwendung kann eine direkte Struktur passend sein. Eine langlebige Anwendung mit komplexen Regeln kann von einem stärker isolierten Kern profitieren. Wichtiger als die Anzahl eingesetzter Muster ist, ob die Struktur zum Problem passt.
+Die passende Entscheidung hängt unter anderem von fachlicher Komplexität, Änderungsanforderungen und den beteiligten Teams ab. Ein Muster ist ein Werkzeug, kein Qualitätsversprechen.
 
-## So arbeitest du mit dem Lernpfad
+## Unser gemeinsames Beispiel
 
-Beginne mit der Unterscheidung zwischen System- und Codeebene. Lerne danach die PetClinic kennen, bevor du die Architekturvarianten vergleichst. Jedes Kapitel hat ein Diagramm, einen Merksatz und eine kurze Verständnisfrage. Im Architecture Explorer kannst du anschliessend den identischen Ablauf in vier Varianten untersuchen.
+Wir verwenden durchgehend die Spring PetClinic. Auf der Systemebene betrachten wir unterschiedliche Aufteilungen derselben Tierarztpraxis. Auf der Codeebene untersuchen unsere eigenen Lehrbeispiele immer denselben Ablauf: **Einen Besuch für ein vorhandenes Haustier erfassen.**
+
+So lassen sich Architekturentscheidungen vergleichen, ohne jedes Mal eine neue Fachdomäne lernen zu müssen. Die tatsächlichen Community-Varianten können zusätzliche Funktionen besitzen; diese Unterschiede kennzeichnen wir ausdrücklich.

@@ -30,6 +30,8 @@ Die Spring-Cloud-Variante der Community enthält unter anderem:
 
 Die Variante beschreibt REST-Kommunikation. Weitere ergänzende Komponenten, etwa ein GenAI Service, sind für unseren Vergleich des klassischen PetClinic-Kerns ausgeblendet.
 
+Die Community-Anwendung ist keine funktionsidentische Kopie des Monolithen. Wir vergleichen die Aufteilung des fachlichen PetClinic-Kerns; ergänzende Funktionen und Infrastruktur sind Eigenschaften der jeweiligen Variante.
+
 ## Was passiert mit unserem Visit?
 
 Im Monolithen kann der VisitController im selben Prozess mit Owner, Pet und Repository arbeiten. In der verteilten Variante liegen Kunden-/Pet-Daten und Visits in unterschiedlichen Services.
