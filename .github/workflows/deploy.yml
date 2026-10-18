@@ -26,6 +26,7 @@ jobs:
         with:
           path: whole-wavelength
           node-version: 24
+          build-cmd: npm run check && npm test && npm run build && npm run verify
 
   deploy:
     needs: build

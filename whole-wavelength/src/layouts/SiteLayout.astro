@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+import { chapters, lessons, repository, url } from '../data/site';
+interface Props { title: string; description?: string; active?: string; }
+const { title, description = 'Softwarearchitektur verstehen – mit Spring PetClinic, anschaulichen Diagrammen und einem interaktiven Architecture Explorer.', active = '' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="de-CH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta property="og:title" content={`${title} · Architektur Atelier`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <title>{title} · Architektur Atelier</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <header class="topbar">
+      <a class="brand" href={url()} aria-label="Architektur Atelier – Startseite"><span class="brand-symbol" aria-hidden="true">a<span>↗</span></span><span>architektur<span class="brand-light">atelier</span></span><span class="brand-tag">PETCLINIC EDITION</span></a>
+      <div class="top-actions"><button class="search-trigger" data-open-search aria-label="Lerninhalte durchsuchen"><span aria-hidden="true">⌕</span><span>Suchen</span><kbd>/</kbd></button><a class="github-link" href={repository} aria-label="Projekt auf GitHub">GitHub ↗</a><button class="menu-toggle" aria-expanded="false" aria-controls="sidebar">Menü ☰</button></div>
+    </header>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Kapitelnavigation">
+        <nav>
+          <a class:list={['nav-home', { active: active === 'home' }]} aria-current={active === 'home' ? 'page' : undefined} href={url()}><span aria-hidden="true">⌂</span> Willkommen</a>
+          <div class="nav-eyebrow">DEIN LERNPFAD</div>
+          {chapters.map(chapter => <div class="nav-group"><div class="nav-heading"><span>{chapter.number}</span>{chapter.title}</div><ul>{chapter.items.map(item => <li><a href={url(`lernen/${item.slug}/`)} class:list={{ active: active === item.slug }} aria-current={active === item.slug ? 'page' : undefined}><span>{item.title}</span><span class="read-dot" data-read-dot={item.slug} aria-hidden="true"></span></a></li>)}</ul></div>)}
+          <div class="nav-tools"><a class:list={{ active: active === 'explorer' }} href={url('explorer/')} aria-current={active === 'explorer' ? 'page' : undefined}><span aria-hidden="true">◇</span> Architecture Explorer <span class="tiny-label">LAB</span></a><a class:list={{ active: active === 'quellen' }} href={url('quellen/')} aria-current={active === 'quellen' ? 'page' : undefined}><span aria-hidden="true">↗</span> Quellen & Referenzen</a><a class:list={{ active: active === 'code' }} href={url('code/')} aria-current={active === 'code' ? 'page' : undefined}><span aria-hidden="true">{`{ }`}</span> Beispielcode</a></div>
+        </nav>
+        <div class="sidebar-progress"><div><span>Dein Fortschritt</span><strong data-progress-label>0 / 13</strong></div><progress data-progress max="13" value="0" aria-label="Gelesene Kapitel"></progress><p>Schritt für Schritt zum Gesamtbild.</p></div>
+        <a class="sidebar-bottom" href={url('lernen/system-und-codeebene/')}><span class="little-dot"></span> Ein Beispiel. Zwei Perspektiven.</a>
+      </aside>
+      <main id="main" class="main-content"><slot /></main>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title"><div class="dialog-head"><h2 id="search-title">Was möchtest du verstehen?</h2><button data-close-search aria-label="Suche schliessen">✕</button></div><label class="sr-only" for="site-search">Kapitel durchsuchen</label><input id="site-search" type="search" placeholder="z. B. Dependency Inversion, Microservices …" autocomplete="off" /><ul class="search-results">{lessons.map(item => <li data-search-text={`${item.title} ${item.chapter} ${item.slug}`}><a href={url(`lernen/${item.slug}/`)}><span>{item.title}</span><small>{item.chapter} ↗</small></a></li>)}</ul><p class="empty-search" hidden>Kein Kapitel gefunden. Versuche einen anderen Begriff.</p></dialog>
+    <script src="../scripts/site.ts"></script>
+  </body>
+</html>

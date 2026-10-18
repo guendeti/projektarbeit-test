@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import { lessons, sources, url } from '../../data/site';
+export async function getStaticPaths() {
+  const entries = await getCollection('lernen');
+  return entries.map(entry => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const data = entry.data;
+const index = lessons.findIndex(item => item.slug === data.slug);
+const lesson = lessons[index];
+const previous = lessons[index - 1];
+const next = lessons[index + 1];
+const references = sources.filter(source => data.sources.includes(source.id));
+---
+<SiteLayout title={data.title} description={data.lead} active={data.slug}>
+  <div class="lesson-grid"><article class="lesson-article">
+    <div class="breadcrumb"><a href={url()}>Lernpfad</a><span>/</span><span>{lesson.chapter}</span></div>
+    <header class="lesson-header"><div class="page-eyebrow">{lesson.number} / {lesson.chapter.toUpperCase()}<span class="reading-time">{lesson.minutes} Min. Lesezeit</span></div><h1>{data.title}</h1><p class="lesson-lead">{data.lead}</p></header>
+    {(data.slug === 'monolith' || data.slug === 'visit-use-case') && <div class="chapter-intro"><strong>{data.slug === 'monolith' ? 'Wir wechseln auf die Systemebene.' : 'Jetzt zoomen wir in den Code.'}</strong><p>{data.slug === 'monolith' ? 'Bisher haben wir die PetClinic als Anwendung kennengelernt. Nun betrachten wir die Struktur des Gesamtsystems: Welche Funktionen werden gemeinsam ausgeführt und deployt, und wo entstehen Systemgrenzen?' : 'Auf der Systemebene ging es um die Aufteilung der PetClinic. Nun untersuchen wir innerhalb einer Anwendung, wie Controller, Fachlogik und Persistenz voneinander abhängig sind.'}</p></div>}
+    <ArchitectureDiagram kind={data.diagram} />
+    {data.slug === 'vergleich' && <div class="comparison-diagrams">{['layered', 'clean', 'hexagonal', 'onion'].map(kind => <div><h2>{kind === 'layered' ? 'Layered' : kind === 'clean' ? 'Clean' : kind === 'hexagonal' ? 'Hexagonal' : 'Onion'}</h2><ArchitectureDiagram kind={kind} compact /></div>)}</div>}
+    <div class="prose"><Content /></div>
+    <aside class="takeaway"><span class="page-eyebrow">DAS NIMMST DU MIT</span><p>{data.takeaway}</p></aside>
+    <section class="knowledge-check" data-quiz data-correct={data.correct} data-explanation={data.explanation}><div class="page-eyebrow">KURZ NACHGEDACHT</div><h2>{data.question}</h2><div class="quiz-options">{data.answers.map((answer, i) => <button data-quiz-answer={i} aria-pressed="false"><span>{String.fromCharCode(65 + i)}</span>{answer}</button>)}</div><p data-quiz-feedback role="status" hidden></p></section>
+    <section class="lesson-sources" id="referenzen"><h2>Quellen zu diesem Kapitel</h2><ul>{references.map(source => <li><a href={source.href}>{source.author}: {source.title} ↗</a></li>)}</ul><p>Eigene Diagramme und Codebeispiele sind didaktische Übertragungen, sofern nicht ausdrücklich anders angegeben.</p></section>
+    <div class="read-action"><button class="button secondary" data-mark-read={data.slug} aria-pressed="false">Kapitel als gelesen markieren</button><span>Nur in diesem Browser gespeichert.</span></div>
+    <nav class="pagination" aria-label="Vorheriges und nächstes Kapitel"><a href={previous ? url(`lernen/${previous.slug}/`) : url()}><small>← ZURÜCK</small><strong>{previous?.title || 'Willkommen'}</strong></a><a href={next ? url(`lernen/${next.slug}/`) : url('explorer/')}><small>WEITER →</small><strong>{next?.title || 'Architecture Explorer'}</strong></a></nav>
+  </article><aside class="toc" aria-label="Auf dieser Seite"><span class="page-eyebrow">AUF DIESER SEITE</span><nav>{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}<a href="#referenzen">Quellen</a></nav><div class="toc-tip"><span>◇</span><strong>Vom Lesen zum Verstehen.</strong><p>Entdecke den Visit-Use-Case im interaktiven Lab.</p><a href={url('explorer/')}>Explorer öffnen →</a></div></aside></div>
+</SiteLayout>

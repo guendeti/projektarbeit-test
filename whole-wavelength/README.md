@@ -1,46 +1,55 @@
-# Astro Starter Kit: Basics
+# Architektur Atelier
 
-```sh
-npm create astro@latest -- --template basics
+Deutschsprachige Lern-Microsite zur Softwarearchitektur. Spring PetClinic ist das gemeinsame Beispiel; auf der Codeebene bleibt der Use-Case «Visit für ein Pet erfassen» konstant.
+
+## Lokal starten
+
+Voraussetzung: Node.js 24 (mindestens 22.22), npm.
+
+```powershell
+cd whole-wavelength
+npm ci
+npm run dev -- --background
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Astro nennt die lokale URL. Wegen GitHub Pages beginnt der Pfad mit `/projektarbeit-test/` (typischerweise `http://localhost:4321/projektarbeit-test/`). Hintergrundserver: `npm run astro -- dev status`, `npm run astro -- dev logs`, `npm run astro -- dev stop`.
 
-## 🚀 Project Structure
+## Prüfen und bauen
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```powershell
+npm run check
+npm test
+npm run build
+npm run verify
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+`check` prüft TypeScript und Astro-Komponenten. Die Tests prüfen das fachliche Verhalten aller vier Architekturvarianten und die Diagrammmodelle. `verify` prüft nach dem Build alle lokalen Links, Assets, Anker, Seitenmetadaten, Quizoptionen und die Sitemap.
 
-## 🧞 Commands
+## Aufbau
 
-All commands are run from the root of the project, from a terminal:
+- `src/content/lernen/`: 13 Markdown-Lernkapitel, gegliedert nach Grundlagen, PetClinic, System- und Codeebene.
+- `src/content.config.ts`: validiertes Schema für Inhalte und Verständnisfragen.
+- `src/data/site.ts`: Lernpfad, Quellen und zentrale URL-Funktion für den Pages-Basispfad.
+- `src/data/explorer.ts`: Komponenten und getrennte Aufruf-/Abhängigkeitsgraphen.
+- `src/components/ArchitectureDiagram.astro`: eigene SVG-Architekturdiagramme.
+- `src/layouts/SiteLayout.astro`: Kopfzeile, Sidebar, Suche und mobile Navigation.
+- `src/scripts/`: progressive Erweiterungen und interaktiver Explorer.
+- `examples/`: ausführbare TypeScript-Varianten, gemeinsames Fachmodell, In-Memory-Adapter und Tests.
+- `src/styles/global.css`: eigenes responsives Design, Druckansicht und Reduced-Motion-Unterstützung.
+- `../docs/`: Konzeption, Technologieentscheid und Prüfprotokoll.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Funktionen
 
-## 👀 Want to learn more?
+Startseite, vollständiger Lernpfad, anklickbare Diagrammkomponenten im Explorer, vier Architekturansichten, Umschaltung Laufzeit/Code, ausführbare Visit-Demo, Eingabevalidierung, Verständnisfragen, browserlokaler Lesefortschritt, Kapitelsuche, Quellen, Codeansicht, Zurück/Weiter, 404 und Sitemap. Lerninhalte sind statisches HTML und bleiben ohne JavaScript lesbar. JavaScript ist für Explorer, Suche, Quiz und Fortschritt nötig.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Die Suche durchsucht Kapiteltitel und Themenzuordnungen mit einigen Synonymen, nicht den vollständigen Artikeltext. Demo-Daten sind fiktiv und nicht dauerhaft gespeichert. Der Lesefortschritt wird ausschliesslich im Browser gespeichert. Google Fonts lädt optionale Schriften; Systemschriften dienen als Fallback. Es gibt keine Anmeldung, Analytics oder Backend-API.
+
+## Fachliche Einordnung
+
+Kanonische PetClinic, Community-Varianten und eigene Refactorings werden getrennt gekennzeichnet. Die SCS-PetClinic ist ein konzeptioneller Entwurf. Java-Ausschnitte sind didaktische Skizzen. Die ausführbaren TypeScript-Beispiele sind keine vollständigen Spring-Anwendungen. Quellen sind im Lernpfad und unter `/quellen/` verlinkt. Für wissenschaftliche Reproduzierbarkeit müssen untersuchte Repository-Commits gesondert fixiert werden.
+
+## GitHub Pages
+
+`astro.config.mjs` enthält `site: https://guendeti.github.io` und `base: /projektarbeit-test`. Der Workflow im Repository-Hauptverzeichnis baut `whole-wavelength` und veröffentlicht bei Push auf `main`. In den Repository-Einstellungen muss Pages als Quelle **GitHub Actions** verwenden.
+
+Öffentliche Adresse: https://guendeti.github.io/projektarbeit-test/
