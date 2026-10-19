@@ -1,96 +1,91 @@
 ---
 title: "Clean Architecture"
 slug: "clean-architecture"
-lead: "Fachliche und anwendungsspezifische Regeln liegen innen. Frameworks und Persistenz bleiben aussen. Die Dependency Rule bestimmt, in welche Richtung der Quellcode abhängig sein darf."
+lead: "Fachliche Regeln und der Use-Case liegen innen. Am ausführbaren Java-Beispiel verfolgen wir einen Visit, ohne den Kern an Spring oder JDBC zu binden."
 diagram: "clean"
 takeaway: "Der Use-Case definiert seinen benötigten Vertrag. Ein äusserer Persistenzadapter implementiert ihn – die Code-Abhängigkeit zeigt nach innen."
 sources: [clean, visit]
-question: "Wer kennt in unserer Clean-Variante das OwnerGateway?"
-answers: [Nur die Datenbank., Der Use-Case und der äussere Adapter; der Use-Case kennt den konkreten Adapter nicht., Der Use-Case muss zwingend Spring Data kennen.]
+question: "Der BookVisitInteractor verwendet plötzlich JdbcTemplate direkt. Was bedeutet das für unsere Clean-Variante?"
+answers: ['Die zusätzliche Klasse ändert nur die Laufzeitansicht.', 'Der innere Use-Case hängt von einem äusseren technischen Detail ab und verletzt die gewählte Grenze.', 'Die Grenze bleibt erhalten, solange der Controller ein Interface verwendet.']
 correct: 1
-explanation: "Der Vertrag gehört zum inneren Bereich. Die technische Implementierung hängt von diesem Vertrag ab."
+explanation: "Die Dependency Rule gilt auch im Use-Case. Ein Eingangsinterface gleicht eine technische Abhängigkeit im Kern nicht aus."
 ---
-## Die Dependency Rule
+## Lernziel und Grundprinzip
 
-Robert C. Martin stellt Clean Architecture als Zusammenführung verwandter Architekturideen vor. Quellcode-Abhängigkeiten sollen zu den inneren Regeln zeigen. Der innere Code soll die äusseren technischen Mechanismen nicht kennen.
+Nach diesem Kapitel kannst du den Visit vom Controller bis zur Speicherung verfolgen, Fachregel und Ablaufkoordination unterscheiden und eine unerlaubte technische Abhängigkeit im Kern erkennen.
 
-Das bekannte Bild unterscheidet Entities, Use Cases, Interface Adapters und Frameworks & Drivers. Die vier Ringe sind ein Denkmodell, keine vorgeschriebene Anzahl von Packages.
+Robert C. Martin unterscheidet Entities, Use Cases, Interface Adapters sowie Frameworks and Drivers. Seine Dependency Rule richtet Quellcode-Abhängigkeiten auf die inneren Regeln aus. Die Kreisform ist ein Denkmodell; sie schreibt weder vier Packages noch bestimmte Klassennamen vor. [Originalbeschreibung von Martin](../../quellen/#clean)
 
-## Vier Bereiche für unseren Visit
+Wir übertragen diese Perspektive auf unseren abgegrenzten Visit. Die folgenden Ausschnitte stammen aus dem **ausführbaren Java-Lehrausschnitt**. Imports und umgebende Klassen sind bei Methodenausschnitten weggelassen; Zeilenumbrüche sind angepasst. Der kanonische PetClinic-Controller bleibt die separate Baseline. Die Browser-Demo verwendet dieselben fachlichen Regeln, aber TypeScript und einen flüchtigen Speicher.
 
-| Bereich | PetClinic-Übertragung |
-| --- | --- |
-| Entities | Owner, Pet und Visit mit Fachregeln |
-| Use Cases | BookVisitInteractor, Command und benötigte Verträge |
-| Interface Adapters | VisitController und JpaOwnerGateway |
-| Frameworks & Drivers | Spring MVC, Spring Data, Datenbank, Konfiguration |
+## Vom HTTP Eingang zum inneren Vertrag
 
-Diese Struktur ist unsere didaktische Umsetzung und keine Beschreibung der originalen PetClinic.
+Der äussere `VisitController` liest Owner- und Pet-ID aus der Route sowie Datum und Beschreibung aus JSON. Er baut daraus `VisitCommand`. HTTP-Typen gelangen nicht in den Use-Case. Sein Eingangsvertrag lautet:
 
-## Eine explizite Eingangsgrenze
-
-```java
+```java source=petclinic-architectures/src/main/java/ch/zhaw/petclinic/clean/application/BookVisitUseCase.java
 public interface BookVisitUseCase {
-    void bookVisit(BookVisitCommand command);
+    void bookVisit(VisitCommand command);
 }
-
-public record BookVisitCommand(
-    int ownerId, int petId,
-    LocalDate date, String description
-) {}
 ```
 
-Der Controller übersetzt die HTTP-Eingabe in einfache Eingabedaten. Spring-Request-Objekte wandern nicht in die Anwendungslogik.
+Der `BookVisitInteractor` implementiert diesen Vertrag. Er lädt den Owner, lässt das Fachmodell den Besuch hinzufügen und speichert das Ergebnis:
 
-## Der innere Persistenzvertrag
+```java source=petclinic-architectures/src/main/java/ch/zhaw/petclinic/clean/application/BookVisitInteractor.java
+public void bookVisit(VisitCommand command) {
+    Owner owner = owners.findById(command.ownerId())
+        .orElseThrow(() -> new NoSuchElementException("Owner nicht gefunden."));
+    owner.addVisit(command, clock);
+    owners.save(owner);
+}
+```
 
-```java
+Diese Methode koordiniert den Anwendungsfall. Die Regel, dass das Datum strikt nach heute liegen muss, wird dagegen in `Owner.addVisit` geprüft. Dort werden auch Pet-Zugehörigkeit und Beschreibung validiert. Alle vier Java-Varianten teilen dieses Fachmodell. Die Platzierung der Regeln bleibt beim Vergleich konstant.
+
+## Wer besitzt den Persistenzvertrag
+
+Die Variable `owners` hat den Typ `OwnerGateway`. Dieses Interface gehört zum inneren Application-Package:
+
+```java source=petclinic-architectures/src/main/java/ch/zhaw/petclinic/clean/application/OwnerGateway.java
 public interface OwnerGateway {
-    Optional<Owner> findById(int ownerId);
+    Optional<Owner> findById(int id);
     void save(Owner owner);
 }
 ```
 
-Der Use-Case braucht Owner laden und speichern. Er definiert diesen Bedarf, ohne JPA oder eine konkrete Datenbank vorzugeben.
+Der Vertrag formuliert, was der Use-Case benötigt. Er enthält weder SQL noch Spring-Data-Typen. Der äussere `JdbcOwnerGateway` implementiert ihn und delegiert an `OwnerJdbcStorage`. Die ausgeführte Referenz verwendet **JDBC und H2**, nicht einen hypothetischen JPA-Adapter. Den vollständigen [Adapter und die Verdrahtung](../../code/#java-clean-adapter) kannst du im Codebereich nachlesen.
 
-```java
-final class BookVisitInteractor implements BookVisitUseCase {
-    private final OwnerGateway owners;
-
-    BookVisitInteractor(OwnerGateway owners) {
-        this.owners = owners;
-    }
-
-    public void bookVisit(BookVisitCommand command) {
-        Owner owner = owners.findById(command.ownerId())
-            .orElseThrow();
-        if (!command.date().isAfter(LocalDate.now())) {
-            throw new InvalidVisitDateException();
-        }
-        owner.addVisit(command.petId(),
-            new Visit(command.date(), command.description()));
-        owners.save(owner);
-    }
-}
-```
-
-Ein äusseres `JpaOwnerGateway` implementiert den Vertrag. Technische Datentypen und Mapping bleiben in diesem Adapter. Die Konfiguration setzt die Objekte zusammen.
-
-## Aufruf und Abhängigkeit auseinanderhalten
-
-Zur Laufzeit ruft der Use-Case die eingesetzte Persistenzimplementierung auf. Im Quellcode kennt er ausschliesslich sein Interface. Der Adapter kennt und implementiert dieses Interface.
+Zur Laufzeit führt die eingesetzte Adapterinstanz den Ladeaufruf aus. Im Quellcode kennt der Interactor nur den inneren Vertrag:
 
 ```text
-Laufzeit: Use-Case → Adapter → Datenbank
-Code:     Use-Case → Gateway ← Adapter
+Laufzeit: Controller → Interactor → JDBC-Adapter → Speicher
+Code:     Interactor → OwnerGateway ← JdbcOwnerGateway
 ```
 
-Der obere Pfeil beschreibt einen Aufruf. Der untere beschreibt statische Typ-Abhängigkeiten. Gerade diese Umkehr ist wichtiger als die gezeichnete Kreisform.
+Ein Interface ist keine zusätzliche ausführende Station. Die Aufrufrichtung nach aussen widerspricht deshalb nicht der Code-Abhängigkeit nach innen.
 
-Input Boundary und Gateway sind Verträge, keine ausführenden Zwischenschritte. Zur Laufzeit ruft der Controller den Interactor über die Input Boundary auf; der Interactor erreicht den eingesetzten Persistenzadapter über das Gateway. Das Diagramm im Explorer trennt deshalb ausführende Komponenten von den sichtbar bleibenden Vertragsmarkierungen.
+## Verdrahtung und bewusste Vereinfachungen
 
-## Testbarkeit und Preis der Grenzen
+`VisitConfiguration` erzeugt Adapter und Interactor und injiziert eine `Clock`. Die Uhr bleibt im Test fest einstellbar; ein Test hängt dadurch nicht vom heutigen Kalenderdatum ab. Die Spring-Konfiguration liegt aussen, der Interactor trägt keine Spring-Annotation.
 
-Ein Test kann das Gateway durch eine In-Memory-Implementierung ersetzen. Der fachliche Ablauf benötigt dafür keinen Spring-Server. Auch ein späterer Adapterwechsel bleibt möglich, sofern der Vertrag passend geschnitten ist.
+Die Transaktion beginnt im Beispiel am HTTP-Einstieg. Ein weiterer Eingang mit echter Datenbank müsste ebenfalls eine passende äussere Transaktionsgrenze erhalten. Ein frameworkfreier Kern allein garantiert keine atomare Speicherung.
 
-Zusätzliche Interfaces, Commands und Mapping erzeugen jedoch Aufwand. Für den kleinen Visit wird dieser besonders sichtbar. Die Struktur lohnt sich nicht automatisch in jeder Anwendung. Unser Ziel ist, ihren Mechanismus und ihren Preis nachvollziehbar zu machen.
+Eine separate Output Boundary mit Presenter führen wir hier nicht ein. Der kleine Use-Case liefert keinen aufbereiteten Ergebnisdatensatz zurück; der Controller antwortet bei Erfolg mit HTTP 201, Fehler werden aussen übersetzt. Bei komplexer Ergebnisdarstellung wäre diese Grenze neu zu prüfen. Das ist eine Begrenzung unseres Beispiels, keine vollständige Darstellung aller Clean-Ausprägungen.
+
+## Eine Änderung konkret beurteilen
+
+Soll die Speicherung ersetzt werden, bleibt der Interactor unverändert, solange der innere Vertrag und seine fachliche Bedeutung erhalten bleiben. Angepasst werden Adapter, Mapping und Konfiguration. Der Wechsel ist nicht kostenlos: Transaktionen, Fehlerverhalten und Integration müssen weiterhin geprüft werden.
+
+Ändert sich dagegen die Regel für Besuchsdaten, betrifft das im Beispiel `Owner` und die Fachtests. Diese Änderung ist kein Anlass, SQL in den Interactor zu verlagern. Ein `JdbcTemplate`-Import dort wäre eine Verletzung der gewählten Grenze und wird durch die vorhandene ArchUnit-Regel gegen technische Abhängigkeiten innerer Packages erfasst.
+
+`CoreWithoutFrameworkTest` führt den Use-Case ohne HTTP, Spring und Datenbank mit einem In-Memory-Ersatz aus. Er prüft einen gültigen Besuch und dass ein heutiges Datum keinen Speicheraufruf auslöst. Diese Prüfung macht eine konkrete Eigenschaft der Grenzen sichtbar, belegt aber keine allgemein bessere Wartbarkeit. [Test ansehen](../../code/#java-core-test)
+
+## Transferaufgabe
+
+Ein neues Formular soll denselben Visit erfassen. Müssen die Datumsprüfung und `OwnerGateway` dafür ein zweites Mal geschrieben werden? Begründe, welche Teile hinzukommen und welche unverändert bleiben.
+
+<details>
+<summary>Lösung und Begründung anzeigen</summary>
+<p>Der neue äussere Adapter übersetzt seine Eingabe in VisitCommand und ruft BookVisitUseCase auf. Interactor, Gateway und Fachmodell bleiben bestehen. Beim weiteren Eingang sind Verdrahtung, Fehlerübersetzung und gegebenenfalls Transaktionsgrenze bereitzustellen. Eine neue Oberfläche allein ändert die fachliche Datumsregel nicht.</p>
+</details>
+
+Im [Explorer](../../explorer/) kannst du die beiden Pfeilansichten gegenüberstellen. Im [Vergleich](../vergleich/) untersuchen wir dieselben Änderungen auch für Layered, Hexagonal und Onion.

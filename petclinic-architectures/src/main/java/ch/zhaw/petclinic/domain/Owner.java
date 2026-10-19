@@ -18,7 +18,7 @@ public final class Owner {
     }
     public void addVisit(VisitCommand command, Clock clock) {
         if (command.ownerId() != id || !pets.containsKey(command.petId()))
-            throw new IllegalArgumentException("Pet gehÃ¶rt nicht zu diesem Owner.");
+            throw new IllegalArgumentException("Pet gehört nicht zu diesem Owner.");
         if (command.date() == null || !command.date().isAfter(LocalDate.now(clock)))
             throw new IllegalArgumentException("Besuchsdatum muss in der Zukunft liegen.");
         String description = command.description();

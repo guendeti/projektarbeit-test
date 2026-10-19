@@ -26,6 +26,10 @@ Stand 18.10.2026. Diese Matrix dokumentiert den tatsächlich vorhandenen Stand. 
 
 Vor der Umsetzung: konkretes Problem und 3–6 überprüfbare Akzeptanzkriterien festlegen. Nach Umsetzung: fachliche Quelle bzw. Sollverhalten prüfen, passende automatisierte Tests ausführen, betroffene Seiten im Browser sichten und Dokumentation aktualisieren. Ein Review mit Betreuungsfeedback darf erst als erledigt gelten, wenn es tatsächlich stattgefunden hat.
 
+## Inhaltliche Nachschärfung vom 19.10.2026
+
+Lernziele und Transferaufgaben in Clean, Hexagonal und Onion; gemeinsame Änderungsszenarien im Vergleich; geführter Untersuchungsauftrag im Explorer. Neun gekennzeichnete Java-Ausschnitte werden über `npm run verify` gegen den ausführbaren Quellcode geprüft. Sechs zusätzliche Kerntests prüfen Clean, Hexagonal und Onion ohne Spring und Datenbank. Hauptbericht und Quellcodearchive werden entsprechend aktualisiert. Q05 bleibt auf ausdrücklichen Nutzerwunsch offen; diese Änderungen ersetzen keine Evaluation mit Personen.
+
 ## Noch notwendige externe Schritte
 
 1. Tatsächliches Betreuungsfeedback zum fertig implementierten Visit-Vergleich dokumentieren und bei Bedarf einarbeiten.

@@ -24,7 +24,7 @@ export class BookVisitService implements BookVisitInputPort {
 }
 export function bookHexagonal(command: VisitCommand, owners: OwnerRepositoryPort, today: string, trace: Trace) {
   trace('web', 'Driving Adapter übersetzt die Formulareingabe.');
-  trace('web', 'Der Adapter ruft den Input Port BookVisitUseCase auf.');
+  trace('web', 'Der Adapter ruft den Input Port BookVisitInputPort auf.');
   const input: BookVisitInputPort = new BookVisitService(owners, today, trace);
   return input.book(command);
 }

@@ -36,4 +36,6 @@ Die HTTP-Routen lauten `/api/{layered|clean|hexagonal|onion}/owners/{ownerId}/pe
 - Die Speicherung ersetzt die Visit-Liste des Aggregats innerhalb einer Transaktion. Kein optimistisches Locking; konkurrierende Änderungen können verloren gehen. Keine Authentisierung, kein produktiver Betrieb vorgesehen.
 - ArchUnit prüft konkrete Abhängigkeiten; daraus folgt keine universelle Zertifizierung der benannten Architekturmuster.
 
-Das Browser-Lab der Microsite führt weiterhin TypeScript mit frischem In-Memory-Speicher aus. Java läuft separat. Die Java-Skizzen der Lernseiten erklären das Prinzip; der ausführbare Code hier verwendet JDBC und eine injizierte Clock.
+Das Browser-Lab der Microsite führt weiterhin TypeScript mit frischem In-Memory-Speicher aus. Java läuft separat. Die Java-Ausschnitte der Lernseiten stammen aus diesem ausführbaren Code mit JDBC und injizierter Clock. Der Website-Prüfbefehl `npm run verify` gleicht die gekennzeichneten Ausschnitte mit ihren Quelldateien ab.
+
+`CoreWithoutFrameworkTest` führt Clean, Hexagonal und Onion ohne Spring, HTTP und Datenbank aus: jeweils ein gültiger Besuch sowie ein heutiges Datum ohne Speicheraufruf. Zusammen mit 20 HTTP-Testausführungen und vier ArchUnit-Tests ergibt das 30 Tests. Die isolierten Tests verwenden den 19.10.2026 als festen heutigen Tag; die HTTP-Tests verwenden den 18.10.2026.

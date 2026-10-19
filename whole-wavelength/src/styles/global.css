@@ -346,3 +346,6 @@ dialog input { width: 100%; padding: 13px; border: 1px solid #849bae; border-rad
 
 /* Keep source examples as readable as the black-on-white lessons. */
 .astro-code span { color: #111 !important; }
+
+.prose details { margin: 1.25rem 0; padding: .8rem 0; border-top: 1px solid var(--border, #ddd); }
+.prose summary { cursor: pointer; font-weight: 600; }

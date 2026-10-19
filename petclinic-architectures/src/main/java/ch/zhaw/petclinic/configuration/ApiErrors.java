@@ -15,6 +15,6 @@ public class ApiErrors {
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<Map<String,String>> malformed() {
-        return ResponseEntity.badRequest().body(Map.of("error", "UngÃ¼ltige JSON-Daten oder ungÃ¼ltiges Datum."));
+        return ResponseEntity.badRequest().body(Map.of("error", "Ungültige JSON-Daten oder ungültiges Datum."));
     }
 }

@@ -58,6 +58,6 @@ Das gilt für unsere vier Code-Lehrbeispiele. Reale Community-Varianten können 
 
 ## Von Java zur ausführbaren Demonstration
 
-Die Lernseiten zeigen vereinfachte Java-Ausschnitte, um an Spring PetClinic anzuknüpfen. Im Explorer laufen entsprechende kleine TypeScript-Varianten mit einer In-Memory-Persistenz. Sie veranschaulichen die Grenzen ohne Spring-Server. Es handelt sich um eigene Beispiele und nicht um Kopien der PetClinic-Implementierung.
+Die Lernseiten zeigen Ausschnitte der ausführbaren Java-Varianten: VisitCommand transportiert die Eingabe, Owner.addVisit prüft die gemeinsamen Fachregeln mit einer injizierten Clock, JDBC übernimmt die Persistenz. Auf der [Codeseite](../../code/) sind die vollständigen Klassen und Tests zugänglich. Der ursprüngliche PetClinic-Controller bleibt die getrennt erklärte Baseline. Im Explorer laufen eigene TypeScript-Übertragungen mit einem flüchtigen Speicher. Sie demonstrieren dieselben fachlichen Grenzen ohne Spring-Server; Rückgabetypen und technische Schnittstellen sind nicht identisch.
 
 Die Demonstration hat bewusst keine echte Terminverwaltung, Anmeldung oder dauerhafte Datenbank. Ihr Zweck ist der vergleichbare Ablauf durch unterschiedliche Verantwortlichkeiten.

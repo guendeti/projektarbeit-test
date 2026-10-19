@@ -42,6 +42,14 @@ Weisser Hintergrund, schwarze Lerntexte und dezente blaue Akzente (#0064a6). Gut
 
 Referenzen: https://www.w3schools.com/css/default.asp · https://refactoring.guru/refactoring/catalog · https://cs50.harvard.edu/python/
 
+## Inhaltliche Vertiefung vom 19. Oktober 2026
+
+Clean, Hexagonal und Onion bleiben die Schwerpunktkapitel. Sie verbinden jeweils ein konkretes Lernziel, den tatsächlichen Java-Code, Grenzen der Umsetzung und eine Transferaufgabe mit aufklappbarer Begründung. Layered bleibt als kürzere Referenz erhalten. Die gemeinsame Fachregel liegt in `Owner.addVisit`; Application Services koordinieren Laden und Speichern. Die Transaktionsgrenze und die Spring-Verdrahtung liegen aussen.
+
+Die Java-Ausschnitte werden gegen ihre Quelldateien geprüft. Vollständige Klassen und frameworkfreie Kerntests sind auf der Codeseite zugänglich. Unterschiede zur TypeScript-Demo werden unmittelbar erklärt. Der Vergleich untersucht dieselben drei Szenarien: Speicheradapter austauschen, heutiges Datum ablehnen und eine technische Abhängigkeit im Kern erkennen. Der erste Fall ist eine Änderungsüberlegung, keine durchgeführte Migration. Der Explorer erhält einen Untersuchungsauftrag mit Vorhersage, Ausführung und anschliessendem Vergleich der Pfeile.
+
+Die Verbindung von Lernziel, Lernaktivität und Frage orientiert sich am Alignment-Grundsatz des Eberly Center: https://www.cmu.edu/teaching/assessment/basics/alignment.html (abgerufen am 19.10.2026). Eine tatsächliche Prüfung des Lernens mit Personen ist auf Nutzerwunsch vorerst zurückgestellt und bleibt offen.
+
 ## Grenzen des Umfangs
 
 Website, TypeScript-Vergleich und vier ausführbare Java-/Spring-Visit-Varianten sind implementiert. Die Varianten sind zusätzlich in den vollständigen gepinnten PetClinic-Quellcode integriert: Ein neuer Eingang speichert in dieselben Tabellen; das Ergebnis erscheint in der ursprünglichen Owner-Detailansicht. Der ursprüngliche Visit-Controller bleibt als Baseline erhalten. Die übrige Anwendung wird nicht als vollständig nach einem der vier Muster umgebaut bezeichnet.

@@ -60,7 +60,28 @@ Ein Interface allein entscheidet den Vergleich nicht. Auch Layered kann Reposito
 
 Die Muster schaffen Möglichkeiten. Ob Tests hilfreich, Grenzen passend und Änderungen einfacher werden, hängt von ihrer konkreten Umsetzung ab. Aus einem Diagramm lässt sich keine empirisch bewiesene Qualitätssteigerung ableiten.
 
-Die ausführbaren Java-/Spring-Varianten auf der Seite „Beispielcode“ ergänzen die Browser-Demo um echte HTTP-Anfragen, JDBC-Persistenz und ArchUnit-Regeln. Sie implementieren denselben Visit als eigenständigen Lehrausschnitt; die vollständige PetClinic wird nicht nachgebaut. Unsere kleinen TypeScript-Varianten zeigen diesen Mechanismus in Isolation. Sie belegen keine vollständige Architekturkonformität einer produktiven Spring-Anwendung. Java-Skizzen und Browser-Demo unterscheiden sich ausserdem in der Aufteilung der Validierung: Die Java-Ausschnitte zeigen die Datumsprüfung im Application Service, die Demo bündelt die gemeinsamen Fachprüfungen in einer Domain-Funktion. Diese Wahl muss nicht durch den Architekturnamen vorgegeben sein.
+## Drei konkrete Änderungen untersuchen
+
+Die folgenden Szenarien beziehen sich auf den tatsächlichen Java-Code. Der Speicheraustausch und die unerlaubte Kopplung sind begründete Änderungsüberlegungen; eine Datenbankmigration und ein absichtlicher Umbau wurden dafür nicht durchgeführt.
+
+| Änderung | Betroffene Grenze | Überprüfbare Aussage |
+| --- | --- | --- |
+| JDBC durch einen anderen Speicher ersetzen | Bei Clean, Hexagonal und Onion: äusserer Adapter, Mapping und Verdrahtung; innerer Vertrag bleibt, sofern seine Semantik passt | Die Kerntests verwenden bereits einen In-Memory-Ersatz. Das belegt Unabhängigkeit dieses Use-Cases, keine abgeschlossene Datenbankmigration. |
+| Heute als Besuchsdatum übergeben | Gemeinsame Regel in Owner.addVisit, aufgerufen mit Clock | Die Tests weisen die Eingabe ab; der Persistenzvertrag darf nicht zum Speichern aufgerufen werden. |
+| JdbcTemplate direkt im Clean-Interactor verwenden | Abhängigkeit vom inneren Use-Case auf Infrastruktur | Die ArchUnit-Regel verbietet diese Art technischer Abhängigkeit im inneren Package. Sie prüft ausgewählte Regeln, keine vollständige Architekturqualität. |
+
+In der Layered-Referenz hängt der Service unmittelbar von der konkreten Repository-Klasse ab. Ein Austausch erfordert deshalb einen passenden Ersatz oder eine Änderung dieses Schnitts. Das ist eine Aussage über diese Implementierung; Layered kann ebenfalls mit abstrahiertem Datenzugriff gebaut werden.
+
+Die Tests ohne Spring und Datenbank führen bei allen drei Varianten dieselben gültigen und ungültigen Eingaben aus. Ein Ersatzspeicher zählt die Aufrufe von save. Bei heutigem Datum bleiben sein Zustand und der Zähler unverändert. Die HTTP-Tests prüfen zusätzlich die echte JDBC- und Transaktionsintegration. Die gemeinsamen Regeln liegen in Java in Owner.addVisit; in der TypeScript-Demo übernimmt sie eine Domain-Funktion. Die Unterschiede sind auf der [Codeseite](../../code/) erklärt.
+
+## Transferaufgabe: eine Entscheidung begründen
+
+Eine kleine interne Anwendung hat eine Oberfläche, eine stabile Datenbank und wenig Fachlogik. Eine zweite Anwendung soll denselben fachlichen Kern über HTTP und eine Kommandozeile verwenden. Welche Grenze würdest du jeweils ausdrücklich einführen? Nenne einen Vorteil und einen Aufwand. Begründe anhand der Anforderungen statt anhand einer Rangliste der Muster.
+
+<details>
+<summary>Mögliche Begründung anzeigen</summary>
+<p>Im ersten Fall kann ein geschichteter Aufbau ausreichen; zusätzliche Verträge brauchen einen konkreten Nutzen. Im zweiten Fall ist ein von HTTP unabhängiger Use-Case mit zwei Eingangsadaptern naheliegend. Ein innerer Persistenzvertrag erleichtert isolierte Tests und hält technische Typen aus dem Kern. Dafür entstehen zusätzliche Interfaces, Mapping und Verdrahtung. Clean, Hexagonal und Onion können diesen Schnitt alle ausdrücken. Aus diesen Anforderungen folgt deshalb noch keine eindeutige Wahl zwischen den drei Namen.</p>
+</details>
 
 ## Kein Sieger ohne Kontext
 

@@ -29,6 +29,12 @@ test('search, reading progress, quiz and mobile navigation work', async ({ page 
     await expect(page.locator('.menu-toggle')).toHaveAttribute('aria-expanded', 'true');
     await page.locator('.sidebar').getByRole('link', { name: 'Clean Architecture', exact: true }).click();
   } else await page.goto('lernen/clean-architecture/');
+  const solution = page.locator('.prose details').first();
+  await expect(solution).not.toHaveAttribute('open', '');
+  await solution.locator('summary').click();
+  await expect(solution).toHaveAttribute('open', '');
+  await expect(solution.locator('p')).toBeVisible();
+  await expect(page.locator('a[href$="code/#java-core-test"]')).toHaveCount(1);
   await page.locator('[data-mark-read]').click();
   await expect(page.locator('[data-mark-read]')).toHaveAttribute('aria-pressed', 'true');
   await page.reload();

@@ -12,89 +12,48 @@ explanation: "Controller und Application Service erhalten getrennte Verantwortli
 ---
 ## Das Grundprinzip
 
-Eine typische Layered Architecture trennt Presentation, Business beziehungsweise Domain Logic und Data Access. In unserer klassischen Variante zeigen Abhängigkeiten von oben nach unten.
+Eine typische Layered Architecture trennt Presentation, Business beziehungsweise Domain Logic und Data Access. Die Schichten sind logische Grenzen und benötigen keine getrennten Prozesse. [Fowlers Beschreibung der Schichten](../../quellen/#layering)
 
-| Bestandteil | Aufgabe |
+| Bestandteil | Aufgabe in unserer Referenz |
 | --- | --- |
 | VisitController | HTTP-Eingabe und Antwort |
 | BookVisitService | Use-Case koordinieren |
-| Owner, Pet, Visit | Fachliche Daten und Verhalten |
-| OwnerRepository | Laden und Speichern |
-| Datenbank | Technische Persistenz |
+| Owner und Visit | Fachliche Daten und Verhalten |
+| OwnerRepository | Laden und Speichern über JDBC |
 
-Diese Schichten sind logische Grenzen. Sie benötigen keine eigenen Prozesse.
+Der kanonische VisitController besitzt keine separate Service-Schicht. Wir führen sie für den Vergleich bewusst ein. Die folgenden Ausschnitte entsprechen unserer ausführbaren Java-Variante, nicht dem Originalcode der PetClinic.
 
-## Unsere Refactoring-Variante
+## Der Service koordiniert den gemeinsamen Ablauf
 
-Der kanonische VisitController besitzt keine separate Service-Schicht. Wir führen sie für den Vergleich bewusst ein. Das folgende Beispiel ist unser didaktisches Refactoring; es ist kein Originalcode aus dem Repository.
-
-```java
-@Controller
-class VisitController {
-    private final BookVisitService service;
-
-    VisitController(BookVisitService service) {
-        this.service = service;
-    }
-
-    public String createVisit(int ownerId, int petId,
-            LocalDate date, String description) {
-        service.bookVisit(ownerId, petId, date, description);
-        return "redirect:/owners/" + ownerId;
-    }
+```java source=petclinic-architectures/src/main/java/ch/zhaw/petclinic/layered/application/BookVisitService.java
+public void bookVisit(VisitCommand command) {
+    Owner owner = owners.findById(command.ownerId())
+        .orElseThrow(() -> new NoSuchElementException("Owner nicht gefunden."));
+    owner.addVisit(command, clock);
+    owners.save(owner);
 }
 ```
 
-Der Service erhält einfache Werte und benötigt kein HTTP-Request-Objekt.
+Der Controller erzeugt `VisitCommand` aus Route und JSON und ruft den Service auf. Die Fachregeln liegen in `Owner.addVisit`; die injizierte `Clock` macht die Datumsprüfung reproduzierbar. Der Service verarbeitet selbst keine HTTP-Objekte und verwendet keine Spring-Annotation. Die äussere Konfiguration setzt die Instanzen zusammen.
 
-```java
-@Service
-class BookVisitService {
-    private final OwnerRepository owners;
+Diese Aufgabentrennung verwenden auch die anderen drei Java-Varianten. Beim Vergleich bleibt deshalb die Fachlichkeit konstant. Eine explizite Service-Schicht findet sich ausserdem in der Spring-Framework-PetClinic; sie ist eine andere Referenz als der kanonische Spring-Boot-Visit. [Community-Variante](../../quellen/#framework)
 
-    BookVisitService(OwnerRepository owners) {
-        this.owners = owners;
-    }
+## Welche Abhängigkeit bleibt
 
-    public void bookVisit(int ownerId, int petId,
-            LocalDate date, String description) {
-        Owner owner = owners.findById(ownerId).orElseThrow();
-        if (!date.isAfter(LocalDate.now())) {
-            throw new InvalidVisitDateException();
-        }
-        owner.addVisit(petId, new Visit(date, description));
-        owners.save(owner);
-    }
-}
-```
-
-Framework-Annotationen, Fehlerbehandlung und das Fachmodell sind hier bewusst gekürzt.
-
-## Was haben wir gewonnen?
-
-Der Controller muss den fachlichen Ablauf nicht mehr kennen. Der Service lässt sich ohne HTTP ansprechen. Die Verantwortlichkeiten sind in der Projektstruktur sichtbar:
-
-```text
-presentation/VisitController
-application/BookVisitService
-data/OwnerRepository
-domain/Owner, Pet, Visit
-```
-
-Eine explizite Drei-Schichten-Struktur findet sich auch in der Spring-Framework-PetClinic-Variante. Sie darf nicht mit dem kanonischen Spring-Boot-Visit-Ablauf gleichgesetzt werden.
-
-## Welche Abhängigkeit bleibt?
-
-In unserem klassischen Beispiel verwendet der Service das Repository-Konzept der Datenzugriffsschicht. Damit kann die fachliche Ablaufkoordination weiterhin von technischen Typen beeinflusst werden.
+Der Service kennt in unserem Beispiel die konkrete `OwnerRepository`-Klasse im Datenzugriffs-Package. Sie delegiert an den gemeinsamen JDBC-Speicher. Das folgende Bild zeigt die Verwendung der Verantwortlichkeiten, nicht eine Verteilung auf Server:
 
 ```text
 Controller → Service → Data Access → Datenbank
+                 ↓
+          Fachmodell Owner
 ```
 
-Layered Architecture verbietet Dependency Inversion nicht. Wir vergleichen hier bewusst die klassische Richtung. Eine geschichtete Anwendung mit inneren Interfaces kann bereits Eigenschaften von Clean oder Hexagonal erfüllen.
+Bei Clean wird der benötigte Persistenzvertrag dagegen im inneren Anwendungsbereich definiert und von einem äusseren Adapter implementiert. Der entscheidende Unterschied liegt in der Code-Abhängigkeit und dem Besitz des Vertrags.
 
-Auch ein Repository-Interface in einer klassischen Datenschicht kann austauschbare Implementierungen und Tests mit Ersatzobjekten ermöglichen. Für Dependency Inversion ist zusätzlich entscheidend, wem der Vertrag gehört und welche Abhängigkeiten er selbst mitbringt. Die Alternative lautet deshalb nicht „Layered ohne Interfaces“ gegen „Clean mit Interfaces“.
+Layered verbietet solche inneren Verträge oder Dependency Inversion nicht. Auch klassische Repository-Interfaces erlauben Ersatzimplementierungen. Wir vergleichen hier ausdrücklich diese konkrete äussere Repository-Abhängigkeit und nicht „Layered ohne Interfaces“ mit „Clean mit Interfaces“.
 
 ## Stärken und Grenzen
 
-Der Ansatz ist leicht nachvollziehbar und reduziert den Einstieg in kleine Anwendungen. Ein Risiko sind Schichten, die nur weiterreichen, oder fachliche Logik, die zwischen Controller und Datenzugriff verstreut bleibt. Die Anzahl der Schichten allein garantiert keine gute Verantwortungsverteilung.
+Wenige erkennbare Rollen erleichtern den Einstieg. Zusätzliche Services, die ausschliesslich weiterreichen, können dagegen unnötige Struktur erzeugen. Für den kleinen Visit ist die Layered-Variante eine legitime Lösung. Ihre Aussagekraft endet dort, wo aus einer gewählten Referenz pauschal schlechtere Testbarkeit oder Wartbarkeit abgeleitet würde.
+
+Im nächsten Kapitel verfolgen wir denselben Ablauf mit einem inneren Persistenzvertrag. Die Dateien aller Varianten und die gemeinsame Domäne stehen im [Codebereich](../../code/#java-domain).
